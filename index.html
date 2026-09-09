@@ -426,12 +426,11 @@ a{ color:var(--ink-royal); }
   position:absolute; inset:0;
   width:100%; height:100%;
   object-fit:cover;
-  opacity:0;
-  transform:scale(1.06);
+  opacity:1;
   transition:opacity .85s ease, transform 1.4s cubic-bezier(.2,.8,.3,1);
   filter:sepia(.28) saturate(.86) contrast(1.03);
 }
-.cameo img.is-on{ opacity:1; transform:scale(1); }
+.cameo img.is-fading{ opacity:0; transform:scale(1.06); }
 .cameo::after{                 /* aged glass bloom */
   content:"";
   position:absolute; inset:0;
@@ -534,9 +533,7 @@ a{ color:var(--ink-royal); }
 /* --- countdown -------------------------------------------- */
 
 .countdown-sheet{
-  background:
-    radial-gradient(90% 70% at 50% 0%, rgba(46,111,142,.42), transparent 62%),
-    linear-gradient(172deg,#123763,var(--ink) 55%,var(--ink-deep));
+  background:linear-gradient(172deg,#16406F,#0F2E56 46%,var(--ink-deep));
   color:var(--parchment);
   text-align:center;
   overflow:hidden;
@@ -556,18 +553,6 @@ a{ color:var(--ink-royal); }
   box-shadow:0 10px 20px -10px rgba(0,0,0,.6), inset 0 -8px 16px rgba(11,37,69,.6);
   position:relative;
   animation:spin 14s linear infinite;
-}
-/* the light a mirror ball actually throws — a wide, soft wash on the
-   sheet behind it, rather than a halo pinned to the ball itself */
-.countdown-sheet::after{
-  content:"";
-  position:absolute;
-  top:-14%; left:50%;
-  width:min(760px,150%); aspect-ratio:1;
-  transform:translateX(-50%);
-  background:radial-gradient(circle, rgba(220,228,236,.16) 0%, rgba(169,196,222,.07) 34%, transparent 68%);
-  pointer-events:none;
-  z-index:0;
 }
 .mirrorball::before{
   content:"";
@@ -593,7 +578,7 @@ a{ color:var(--ink-royal); }
   margin:0 auto;
 }
 .unit{
-  padding:clamp(12px,2.6vw,20px) 4px;
+  padding:clamp(12px,2.6vw,20px) clamp(10px,2vw,14px);
   border:1px solid rgba(221,184,110,.34);
   border-radius:2px;
   background:rgba(255,255,255,.035);
@@ -646,10 +631,9 @@ a{ color:var(--ink-royal); }
 }
 .venue-addr{
   text-align:center;
-  font-size:.76rem;
-  letter-spacing:.24em;
-  text-indent:.24em;
-  text-transform:uppercase;
+  font-size:1rem;
+  font-style:italic;
+  letter-spacing:.01em;
   color:var(--gold);
   margin:0 0 1.9em;
 }
@@ -1031,7 +1015,7 @@ a{ color:var(--ink-royal); }
         A heritage hotel on the Corniche since 1906, whose terrace opens
         one hundred and eighty degrees onto the sea.
       </p>
-      <p class="venue-addr rise d1">17 El Shohada St &middot; El Raml Station &middot; Alexandria</p>
+      <p class="venue-addr rise d1">17 El Shohada Street &middot; El Raml Station &middot; Alexandria</p>
 
       <div id="map" class="rise d1" role="application" aria-label="Map showing Windsor Palace Hotel, Alexandria"></div>
 
@@ -1360,16 +1344,21 @@ function startCameos(){
     dots.appendChild(b);
   });
 
-  function paint(n){
-    imgA.classList.remove("is-on");
-    imgR.classList.remove("is-on");
+  function paint(n, instant){
+    if (instant){ mark(n); return; }
+    imgA.classList.add("is-fading");
+    imgR.classList.add("is-fading");
     setTimeout(function(){
       imgA.src = PAIRS[n][0];
       imgR.src = PAIRS[n][1];
-      var on = function(){ imgA.classList.add("is-on"); imgR.classList.add("is-on"); };
+      var on = function(){ imgA.classList.remove("is-fading"); imgR.classList.remove("is-fading"); };
       if (imgA.complete && imgR.complete) on(); else imgA.onload = on;
     }, reduced ? 0 : 260);
 
+    mark(n);
+  }
+
+  function mark(n){
     Array.prototype.forEach.call(dots.children, function(d, k){
       d.setAttribute("aria-current", k === n ? "true" : "false");
     });
@@ -1388,7 +1377,7 @@ function startCameos(){
   // preload so the crossfades never stutter
   PAIRS.forEach(function(pair){ pair.forEach(function(src){ new Image().src = src; }); });
 
-  paint(0);
+  paint(0, true);
   if (!reduced) rest();
 }
 

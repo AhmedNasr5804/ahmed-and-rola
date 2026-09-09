@@ -826,7 +826,7 @@ a{ color:var(--ink-royal); }
 
 .clock{
   display:grid;
-  grid-template-columns:repeat(4,1fr);
+  grid-template-columns:repeat(4,minmax(0,1fr));
   gap:clamp(6px,2vw,18px);
   max-width:520px;
   margin:0 auto;
@@ -834,6 +834,7 @@ a{ color:var(--ink-royal); }
 .unit{
   padding:18px 14px;
   border:1px solid rgba(221,184,110,.34);
+  min-width:0;
   border-radius:2px;
   background:rgba(255,255,255,.035);
 }
@@ -851,12 +852,22 @@ a{ color:var(--ink-royal); }
   display:block;
   margin-top:.75em;
   font-size:.7rem;
-  letter-spacing:.22em;
-  text-indent:.28em;
+  letter-spacing:clamp(.01em,.55vw,.22em);
+  text-indent:clamp(.01em,.55vw,.22em);
   text-transform:uppercase;
   color:var(--gold-lit);
+  white-space:nowrap;
 }
 .clock-note{ margin:1.7em auto 0; }
+
+/* on the narrowest phones four columns cannot hold "SECONDS", so pair them */
+/* Four across cannot hold "SECONDS" on a phone without clipping it, so
+   pair them two-up and let the numerals grow into the extra room. */
+@media (max-width:430px){
+  .clock{ grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; max-width:340px; }
+  .unit{ padding:20px 14px; }
+  .unit b{ font-size:clamp(2.1rem,9.5vw,2.7rem); }
+}
 
 /* --- venue ------------------------------------------------ */
 
@@ -1193,7 +1204,7 @@ a{ color:var(--ink-royal); }
         </button>
       </div>
 
-      <p class="cam-count rise d2" id="camCount">1 / 18</p>
+      <p class="cam-count rise d2" id="camCount">1 / 22</p>
 
       <div class="rule-orn rise d2" aria-hidden="true">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0l2 6 6 2-6 2-2 6-2-6-6-2 6-2z"/></svg>
@@ -1387,15 +1398,15 @@ var WEB3FORMS_KEYS = [
   "ac4ec317-153d-4c8c-aa92-4abdc6f0ccd0"    // rolaeissa58@gmail.com
 ];
 
-/* Both sets run youngest to oldest. Ahmed has 18 photographs and Rola 14,
-   so each slide takes Ahmed's next one and the age-matched one of Rola's.
-   The mapping is monotone and hits every index, so nothing is left out. */
-var A_COUNT = 18, R_COUNT = 14;
-var SLIDES  = A_COUNT;
+/* Both sets run youngest to oldest. Rola has 22 photographs and Ahmed 18,
+   so the slider runs 22 long: hers advance one per slide, his are spread
+   across the same span by age. Every photograph in both folders appears. */
+var A_COUNT = 18, R_COUNT = 22;
+var SLIDES  = Math.max(A_COUNT, R_COUNT);
 
 function pad2(n){ return n < 10 ? "0" + n : "" + n; }
-function ahmedSrc(i){ return "assets/a-" + pad2(i + 1) + ".jpg"; }
-function rolaSrc(i){  return "assets/r-" + pad2(Math.round(i * (R_COUNT - 1) / (A_COUNT - 1)) + 1) + ".jpg"; }
+function ahmedSrc(i){ return "assets/a-" + pad2(Math.round(i * (A_COUNT - 1) / (SLIDES - 1)) + 1) + ".jpg"; }
+function rolaSrc(i){  return "assets/r-" + pad2(Math.round(i * (R_COUNT - 1) / (SLIDES - 1)) + 1) + ".jpg"; }
 
 var $ = function(s){ return document.querySelector(s); };
 var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -1662,18 +1673,23 @@ function startCameos(){
   function go(n, manual){
     i = (n + SLIDES) % SLIDES;
 
-    imgA.classList.add("is-fading");
-    imgR.classList.add("is-fading");
+    var nextA = ahmedSrc(i), nextR = rolaSrc(i);
+    var movedA = !imgA.src.endsWith(nextA);
+    var movedR = !imgR.src.endsWith(nextR);
+
+    if (movedA) imgA.classList.add("is-fading");
+    if (movedR) imgR.classList.add("is-fading");
 
     setTimeout(function(){
-      imgA.src = ahmedSrc(i);
-      imgR.src = rolaSrc(i);
+      if (movedA) imgA.src = nextA;
+      if (movedR) imgR.src = nextR;
       var on = function(){
         imgA.classList.remove("is-fading");
         imgR.classList.remove("is-fading");
       };
-      if (imgA.complete && imgR.complete) on(); else imgA.onload = on;
-    }, reduced ? 0 : 250);
+      var lead = movedR ? imgR : imgA;
+      if (lead.complete) on(); else lead.onload = on;
+    }, (reduced || (!movedA && !movedR)) ? 0 : 250);
 
     mark(i);
     prefetch(i);

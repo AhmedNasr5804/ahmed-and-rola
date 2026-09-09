@@ -22,7 +22,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;1,6..96,400&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Pinyon+Script&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;1,6..96,400&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Pinyon+Script&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 
 <style>
@@ -32,23 +32,25 @@
    ============================================================ */
 
 :root{
-  --ink:        #0B2545;   /* deep navy — the dominant field        */
+  --ink:        #0B2545;
   --ink-deep:   #061829;
-  --ink-royal:  #143C74;   /* royal blue from the drapes            */
-  --sea:        #2E6F8E;   /* Alexandria water                      */
-  --powder:     #A9C4DE;   /* powder-blue florals                   */
-  --parchment:  #F5EEDE;   /* the card stock                        */
+  --ink-royal:  #143C74;
+  --sea:        #2E6F8E;
+  --powder:     #A9C4DE;
+  --parchment:  #F5EEDE;
   --parch-2:    #EBE0C7;
   --parch-3:    #DCCFB0;
   --gold:       #B0873F;
+  --gold-ink:   #7E5E1E;   /* gold dark enough to read on cream */
   --gold-lit:   #DDB86E;
   --gold-pale:  #E7D2A4;
   --sage:       #7C8A67;
-  --silver:     #DCE4EC;   /* disco-ball glint                      */
+  --silver:     #DCE4EC;
 
   --serif:  "EB Garamond", Georgia, "Times New Roman", serif;
   --display:"Bodoni Moda", "Didot", Georgia, serif;
   --script: "Pinyon Script", "Snell Roundhand", cursive;
+  --arabic: "Amiri", "Traditional Arabic", serif;
 
   --rule: 1px solid rgba(176,135,63,.42);
   --gutter: clamp(18px, 5vw, 44px);
@@ -56,7 +58,6 @@
 }
 
 *,*::before,*::after{ box-sizing:border-box; }
-
 html{ scroll-behavior:smooth; -webkit-text-size-adjust:100%; }
 
 body{
@@ -75,14 +76,9 @@ body.is-sealed{ overflow:hidden; height:100dvh; }
 img{ max-width:100%; display:block; }
 button{ font:inherit; color:inherit; cursor:pointer; }
 a{ color:var(--ink-royal); }
-
 ::selection{ background:var(--gold-pale); color:var(--ink); }
 
-:focus-visible{
-  outline:2px solid var(--gold-lit);
-  outline-offset:3px;
-  border-radius:2px;
-}
+:focus-visible{ outline:2px solid var(--gold-lit); outline-offset:3px; border-radius:2px; }
 
 /* ---------- paper + ornament primitives ------------------- */
 
@@ -93,7 +89,7 @@ a{ color:var(--ink-royal); }
     radial-gradient(90% 70% at 12% 100%, #EFE4CB 0%, transparent 60%),
     linear-gradient(178deg, var(--parchment), var(--parch-2));
 }
-.paper::after{               /* fibrous grain */
+.paper::after{
   content:"";
   position:absolute; inset:0;
   pointer-events:none;
@@ -102,9 +98,7 @@ a{ color:var(--ink-royal); }
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.28'/%3E%3C/svg%3E");
 }
 
-.flourish{ display:block; margin-inline:auto; color:var(--gold); }
-
-.rule-orn{                    /* — ❖ — divider */
+.rule-orn{
   display:flex; align-items:center; justify-content:center;
   gap:14px; margin:clamp(26px,4vw,42px) auto;
   color:var(--gold);
@@ -121,15 +115,25 @@ a{ color:var(--ink-royal); }
   font-size:.72rem;
   letter-spacing:.42em;
   text-transform:uppercase;
-  color:var(--gold);
+  color:var(--gold-ink);
   margin:0 0 .9em;
   text-indent:.42em;
 }
 
-.script{ font-family:var(--script); font-weight:400; line-height:1; }
+/* a line in their own voice, set apart from the formal copy */
+.quote{
+  font-style:italic;
+  font-size:clamp(1.02rem,2.7vw,1.18rem);
+  line-height:1.78;
+  color:rgba(11,37,69,.8);
+  max-width:42ch;
+  margin:0 auto;
+  text-align:center;
+}
+.quote.on-dark{ color:rgba(245,238,222,.82); }
 
 /* ============================================================
-   1 · THE GATE — a sealed letter
+   1 · THE GATE
    ============================================================ */
 
 #gate{
@@ -140,13 +144,12 @@ a{ color:var(--ink-royal); }
     radial-gradient(120% 80% at 50% 8%,  rgba(46,111,142,.40) 0%, transparent 58%),
     radial-gradient(90% 60% at 50% 108%, rgba(20,60,116,.85) 0%, transparent 62%),
     linear-gradient(170deg,#0E2E56 0%, var(--ink) 42%, var(--ink-deep) 100%);
-  transition:opacity .9s ease .35s, visibility .9s ease .35s;
+  transition:opacity .8s ease .5s, visibility .8s ease .5s;
 }
 #gate.is-open{ opacity:0; visibility:hidden; pointer-events:none; }
 
 #glints{ position:absolute; inset:0; width:100%; height:100%; }
 
-/* horizon line — the 180° sea view */
 #gate::after{
   content:"";
   position:absolute; left:-5%; right:-5%; bottom:14%;
@@ -155,15 +158,11 @@ a{ color:var(--ink-royal); }
   filter:blur(.4px);
 }
 
-.envelope{
-  position:relative; z-index:2;
-  width:min(430px,100%);
-  perspective:1400px;
-}
+.envelope{ position:relative; z-index:2; width:min(430px,100%); perspective:1400px; }
 
 .card{
   position:relative;
-  padding:clamp(38px,7vw,54px) clamp(26px,6vw,40px) clamp(34px,6vw,44px);
+  padding:clamp(34px,6.5vw,50px) clamp(24px,6vw,38px) clamp(30px,5.5vw,40px);
   border-radius:3px;
   box-shadow:
     0 1px 0 rgba(255,255,255,.5) inset,
@@ -171,12 +170,13 @@ a{ color:var(--ink-royal); }
     0 6px 18px -8px rgba(0,0,0,.5);
   transform-origin:50% 60%;
   animation:cardIn 1.5s cubic-bezier(.16,.84,.3,1) both;
+  text-align:center;
 }
 @keyframes cardIn{
   from{ opacity:0; transform:translateY(34px) scale(.965) rotateX(7deg); }
   to  { opacity:1; transform:none; }
 }
-.card::before{                 /* engraved double keyline */
+.card::before{
   content:"";
   position:absolute; inset:11px;
   border:1px solid rgba(176,135,63,.55);
@@ -186,37 +186,18 @@ a{ color:var(--ink-royal); }
 }
 
 .corner{ position:absolute; width:46px; height:46px; color:var(--gold); opacity:.85; }
-.corner.tl{ top:14px;  left:14px; }
-.corner.tr{ top:14px;  right:14px;  transform:scaleX(-1); }
+.corner.tl{ top:14px; left:14px; }
+.corner.tr{ top:14px; right:14px; transform:scaleX(-1); }
 .corner.bl{ bottom:14px; left:14px; transform:scaleY(-1); }
 .corner.br{ bottom:14px; right:14px; transform:scale(-1); }
 
-.seal{
-  width:78px; height:78px; margin:0 auto clamp(20px,4vw,28px);
-  border-radius:50%;
-  display:grid; place-items:center;
-  background:
-    radial-gradient(60% 60% at 34% 28%, #1F5290 0%, transparent 60%),
-    radial-gradient(circle at 50% 50%, var(--ink-royal), var(--ink) 70%);
-  box-shadow:
-    0 0 0 1px rgba(221,184,110,.75),
-    0 10px 22px -8px rgba(0,0,0,.45),
-    inset 0 -6px 14px rgba(0,0,0,.42),
-    inset 0 4px 10px rgba(255,255,255,.14);
-  position:relative;
-}
-.seal::before{
-  content:"";
-  position:absolute; inset:7px;
-  border-radius:50%;
-  border:1px dashed rgba(221,184,110,.45);
-}
-.seal span{
-  font-family:var(--display);
-  font-size:1.55rem;
-  color:var(--gold-pale);
-  letter-spacing:.02em;
-  text-shadow:0 1px 0 rgba(0,0,0,.5);
+.gate-kicker{
+  font-size:.66rem;
+  letter-spacing:.36em;
+  text-indent:.36em;
+  text-transform:uppercase;
+  color:rgba(11,37,69,.72);
+  margin:0 0 1.4em;
 }
 
 .gate-names{
@@ -226,7 +207,6 @@ a{ color:var(--ink-royal); }
   line-height:1.06;
   letter-spacing:.06em;
   text-transform:uppercase;
-  text-align:center;
   color:var(--ink);
   margin:0;
 }
@@ -237,91 +217,210 @@ a{ color:var(--ink-royal); }
   text-transform:none;
   letter-spacing:0;
   color:var(--gold);
-  margin:.06em 0 .04em;
+  margin:.02em 0;
   line-height:.9;
 }
-.gate-sub{
-  text-align:center;
-  margin:1.5em 0 0;
-  font-size:1.02rem;
-  color:rgba(11,37,69,.82);
-  font-style:italic;
-}
-.gate-date{
-  text-align:center;
+
+.gate-ar{
+  font-family:var(--arabic);
+  font-size:clamp(1.3rem,5vw,1.6rem);
+  color:var(--gold);
   margin:.5em 0 0;
-  font-family:var(--display);
-  letter-spacing:.16em;
-  font-size:.86rem;
-  text-transform:uppercase;
-  color:var(--ink-royal);
+  direction:rtl;
+}
+
+.gate-date{
+  margin:1.5em 0 0;
+  font-style:italic;
+  font-size:1.02rem;
+  color:rgba(11,37,69,.78);
+  line-height:1.5;
+}
+
+/* the seal splits down the middle when it breaks */
+.seal-wrap{
+  position:relative;
+  width:86px; height:86px;
+  margin:clamp(22px,4vw,30px) auto 0;
+}
+.seal-half{ position:absolute; top:0; width:50%; height:100%; overflow:hidden; }
+.seal-half.l{ left:0; }
+.seal-half.r{ right:0; }
+.seal-face{
+  position:absolute; top:0;
+  width:86px; height:86px;
+  border-radius:50%;
+  background:
+    radial-gradient(60% 60% at 34% 28%, #1F5290 0%, transparent 60%),
+    radial-gradient(circle at 50% 50%, var(--ink-royal), var(--ink) 70%);
+  box-shadow:
+    inset 0 -6px 14px rgba(0,0,0,.42),
+    inset 0 4px 10px rgba(255,255,255,.14);
+  display:grid; place-items:center;
+}
+.seal-half.l .seal-face{ left:0; }
+.seal-half.r .seal-face{ right:0; }
+.seal-face span{
+  font-family:var(--script);
+  font-size:2.1rem;
+  color:var(--gold-pale);
+  line-height:1;
+}
+.seal-wrap::before{
+  content:"";
+  position:absolute; inset:0;
+  border-radius:50%;
+  box-shadow:0 0 0 1px rgba(221,184,110,.75), 0 10px 22px -8px rgba(0,0,0,.45);
+  pointer-events:none;
+  z-index:2;
 }
 
 .open-btn{
   display:block;
-  margin:clamp(26px,5vw,34px) auto 0;
-  padding:.92em 3.3em;
-  border:1px solid var(--gold-lit);
-  border-radius:999px;
-  background:linear-gradient(178deg,var(--ink-royal),var(--ink));
-  color:var(--parchment);
+  margin:clamp(20px,4vw,26px) auto 0;
+  padding:.55em 1.4em;
+  border:0;
+  background:transparent;
+  color:rgba(11,37,69,.72);
   font-family:var(--display);
-  font-size:.94rem;
-  letter-spacing:.3em;
-  text-indent:.3em;
+  font-size:.72rem;
+  letter-spacing:.34em;
+  text-indent:.34em;
   text-transform:uppercase;
-  box-shadow:0 10px 24px -12px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.16);
-  transition:transform .35s cubic-bezier(.2,.8,.3,1), box-shadow .35s, letter-spacing .35s;
+  transition:color .35s, letter-spacing .35s;
 }
-.open-btn:hover{
-  transform:translateY(-2px);
-  letter-spacing:.36em;
-  box-shadow:0 16px 30px -12px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.22);
-}
-.open-btn:active{ transform:translateY(0); }
-
-.gate-hint{
-  text-align:center; margin:1.4em 0 0;
-  font-size:.74rem; letter-spacing:.2em; text-transform:uppercase;
-  color:rgba(11,37,69,.42);
-}
+.open-btn:hover{ color:var(--ink); letter-spacing:.42em; }
 
 /* opening choreography */
-#gate.is-open .card{ animation:cardOut 1.05s cubic-bezier(.6,.02,.2,1) both; }
+#gate.is-open .card{ animation:cardOut 1s cubic-bezier(.6,.02,.2,1) both; }
 @keyframes cardOut{
   35% { transform:translateY(-10px) scale(1.015); }
-  100%{ transform:translateY(-52px) scale(1.09) rotateX(-12deg); opacity:0; }
+  100%{ transform:translateY(-52px) scale(1.08) rotateX(-12deg); opacity:0; }
 }
-#gate.is-open .seal{ animation:sealBreak .6s cubic-bezier(.5,-.3,.4,1.4) both; }
-@keyframes sealBreak{
-  40% { transform:scale(1.14) rotate(-7deg); }
-  100%{ transform:scale(.5) rotate(16deg) translateY(26px); opacity:0; }
-}
+#gate.is-open .seal-half.l{ animation:splitL .75s cubic-bezier(.5,-.2,.4,1.2) both; }
+#gate.is-open .seal-half.r{ animation:splitR .75s cubic-bezier(.5,-.2,.4,1.2) both; }
+#gate.is-open .seal-wrap::before{ animation:sealRing .5s ease both; }
+@keyframes splitL{ to{ transform:translateX(-34px) rotate(-16deg); opacity:0; } }
+@keyframes splitR{ to{ transform:translateX(34px)  rotate(16deg);  opacity:0; } }
+@keyframes sealRing{ to{ opacity:0; transform:scale(1.25); } }
 
 /* ============================================================
-   2 · THE INVITATION
+   2 · THE MIRROR BALL — drops, turns, climbs back
    ============================================================ */
 
-#invite{
-  position:relative;
+#ballStage{
+  position:fixed; inset:0; z-index:70;
+  pointer-events:none;
   opacity:0;
-  transition:opacity 1.15s ease .28s;
+  background:linear-gradient(180deg, rgba(6,24,41,.94), rgba(11,37,69,.86) 45%, rgba(6,24,41,.94));
+  transition:opacity .5s ease;
 }
+#ballStage.is-live{ opacity:1; }
+#ballStage.is-done{ opacity:0; }
+
+.rig{
+  position:absolute;
+  left:50%; top:0;
+  transform:translateX(-50%);
+  height:0;
+}
+#ballStage.is-live .rig{ animation:rigDrop 6.6s cubic-bezier(.34,.82,.36,1) both; }
+@keyframes rigDrop{
+  0%   { height:0; }
+  26%  { height:44vh; }
+  34%  { height:41vh; }          /* the cable settles */
+  40%  { height:43vh; }
+  68%  { height:43vh; }
+  100% { height:0; }
+}
+
+.cord{
+  position:absolute; left:50%; top:0; bottom:0;
+  width:1px;
+  background:linear-gradient(180deg, rgba(221,184,110,.15), rgba(221,184,110,.6));
+  transform:translateX(-50%);
+}
+
+.ball{
+  position:absolute; left:50%; bottom:0;
+  width:clamp(84px,22vw,132px);
+  aspect-ratio:1;
+  transform:translate(-50%,50%);
+  border-radius:50%;
+  background:
+    radial-gradient(38% 38% at 32% 26%, rgba(255,255,255,.95), transparent 60%),
+    conic-gradient(from 0deg,#8FA6BE,#E4EDF5,#6E8AA6,#DCE4EC,#7E97B2,#F1F6FA,#93AAC2,#E8F0F7,#8FA6BE);
+  box-shadow:0 14px 26px -12px rgba(0,0,0,.75), inset 0 -10px 20px rgba(11,37,69,.55);
+  animation:ballSpin 5s linear infinite;
+}
+.ball::before{
+  content:"";
+  position:absolute; inset:0; border-radius:50%;
+  background-image:
+    repeating-linear-gradient(0deg,  rgba(11,37,69,.55) 0 1px, transparent 1px 9px),
+    repeating-linear-gradient(90deg, rgba(11,37,69,.55) 0 1px, transparent 1px 9px);
+  mix-blend-mode:overlay;
+}
+@keyframes ballSpin{ to{ transform:translate(-50%,50%) rotate(360deg); } }
+
+/* the light it throws: hard-edged wedges sweeping the room */
+.beams{
+  position:absolute; left:50%; top:100%;   /* the ball's centre */
+  width:230vmax; height:230vmax;
+  transform:translate(-50%,-50%);
+  opacity:0;
+  background:repeating-conic-gradient(from 0deg,
+      rgba(220,228,236,.13) 0deg 3deg,
+      transparent 3deg 17deg,
+      rgba(169,196,222,.09) 17deg 19deg,
+      transparent 19deg 34deg);
+  -webkit-mask-image:radial-gradient(circle, #000 4%, rgba(0,0,0,.55) 26%, transparent 62%);
+          mask-image:radial-gradient(circle, #000 4%, rgba(0,0,0,.55) 26%, transparent 62%);
+  animation:beamTurn 12s linear infinite;
+}
+#ballStage.is-live .beams{ animation:beamTurn 12s linear infinite, beamFade 6.6s ease both; }
+@keyframes beamTurn{ to{ transform:translate(-50%,-50%) rotate(360deg); } }
+@keyframes beamFade{
+  0%,14% { opacity:0; }
+  30%    { opacity:1; }
+  62%    { opacity:1; }
+  86%    { opacity:0; }
+  100%   { opacity:0; }
+}
+
+#ballStage .skip{
+  position:absolute;
+  left:50%; bottom:6vh;
+  transform:translateX(-50%);
+  pointer-events:auto;
+  border:1px solid rgba(221,184,110,.45);
+  background:transparent;
+  color:rgba(245,238,222,.75);
+  padding:.5em 1.6em;
+  border-radius:999px;
+  font-family:var(--display);
+  font-size:.68rem;
+  letter-spacing:.28em;
+  text-indent:.28em;
+  text-transform:uppercase;
+}
+#ballStage .skip:hover{ color:var(--parchment); border-color:var(--gold-lit); }
+
+/* ============================================================
+   3 · THE INVITATION
+   ============================================================ */
+
+#invite{ position:relative; opacity:0; transition:opacity 1.1s ease .2s; }
 #invite.is-revealed{ opacity:1; }
 
-/* the sea beyond the paper */
 .sea-field{
   position:fixed; inset:0; z-index:-2;
   background:
-    radial-gradient(80% 55% at 50% 0%,   #16406F 0%, transparent 60%),
-    radial-gradient(60% 40% at 82% 74%,  rgba(46,111,142,.55) 0%, transparent 62%),
+    radial-gradient(80% 55% at 50% 0%,  #16406F 0%, transparent 60%),
+    radial-gradient(60% 40% at 82% 74%, rgba(46,111,142,.55) 0%, transparent 62%),
     linear-gradient(172deg,#0F3160,var(--ink) 46%,var(--ink-deep));
 }
-#petals{
-  position:fixed; inset:0; z-index:40;
-  pointer-events:none;
-  width:100%; height:100%;
-}
+#petals{ position:fixed; inset:0; z-index:40; pointer-events:none; width:100%; height:100%; }
 
 .sheet{
   position:relative;
@@ -329,9 +428,7 @@ a{ color:var(--ink-royal); }
   margin:clamp(22px,4vw,52px) auto;
   padding:clamp(34px,6vw,68px) clamp(22px,5.5vw,64px);
   border-radius:2px;
-  box-shadow:
-    0 40px 90px -34px rgba(0,0,0,.66),
-    0 2px 0 rgba(255,255,255,.35) inset;
+  box-shadow:0 40px 90px -34px rgba(0,0,0,.66), 0 2px 0 rgba(255,255,255,.35) inset;
 }
 .sheet > *{ position:relative; z-index:1; }
 .sheet::before{
@@ -343,7 +440,6 @@ a{ color:var(--ink-royal); }
   pointer-events:none;
   z-index:0;
 }
-
 .inner{ max-width:var(--measure); margin-inline:auto; }
 
 /* --- hero ------------------------------------------------- */
@@ -351,10 +447,12 @@ a{ color:var(--ink-royal); }
 .hero{ text-align:center; padding-block:clamp(8px,2vw,20px); }
 
 .hero-kicker{
-  font-style:italic;
-  color:rgba(11,37,69,.68);
-  margin:0 0 1.1em;
-  font-size:1.02rem;
+  font-size:.68rem;
+  letter-spacing:.36em;
+  text-indent:.36em;
+  text-transform:uppercase;
+  color:rgba(11,37,69,.72);
+  margin:0 0 1.3em;
 }
 
 .names{
@@ -375,7 +473,7 @@ a{ color:var(--ink-royal); }
   letter-spacing:0;
   text-transform:none;
   line-height:.86;
-  margin:.06em 0;
+  margin:.02em 0;
 }
 .surname{
   display:block;
@@ -383,18 +481,42 @@ a{ color:var(--ink-royal); }
   letter-spacing:.4em;
   text-indent:.4em;
   margin-top:.55em;
-  color:rgba(11,37,69,.5);
+  color:rgba(11,37,69,.72);
   font-family:var(--serif);
   text-transform:uppercase;
 }
 
-.hero-body{
-  font-size:clamp(1.02rem,2.6vw,1.16rem);
-  color:rgba(11,37,69,.86);
-  max-width:46ch;
-  margin:0 auto;
+.hero-ar{
+  font-family:var(--arabic);
+  font-size:clamp(1.5rem,6vw,2rem);
+  color:var(--gold);
+  margin:.9em 0 0;
+  direction:rtl;
 }
-.hero-body em{ color:var(--ink-royal); }
+.hero-ar small{
+  display:block;
+  font-family:var(--serif);
+  font-size:.74rem;
+  letter-spacing:.26em;
+  text-indent:.26em;
+  text-transform:uppercase;
+  direction:ltr;
+  color:rgba(11,37,69,.72);
+  margin-top:.7em;
+}
+
+/* --- section heads ---------------------------------------- */
+
+.note-head{
+  font-family:var(--display);
+  font-weight:500;
+  font-size:clamp(1.5rem,5.4vw,2.15rem);
+  letter-spacing:.05em;
+  text-transform:uppercase;
+  margin:0 0 .7em;
+  text-align:center;
+  color:var(--ink);
+}
 
 /* --- cameos ----------------------------------------------- */
 
@@ -408,10 +530,9 @@ a{ color:var(--ink-royal); }
   margin:clamp(22px,4vw,34px) auto 0;
   max-width:540px;
 }
-
 .cameo{
   position:relative;
-  margin:0;                     /* figure's UA margin would crush the grid */
+  margin:0;
   aspect-ratio:1;
   border-radius:50% / 54%;
   overflow:hidden;
@@ -427,11 +548,11 @@ a{ color:var(--ink-royal); }
   width:100%; height:100%;
   object-fit:cover;
   opacity:1;
-  transition:opacity .85s ease, transform 1.4s cubic-bezier(.2,.8,.3,1);
+  transition:opacity .8s ease, transform 1.4s cubic-bezier(.2,.8,.3,1);
   filter:sepia(.28) saturate(.86) contrast(1.03);
 }
 .cameo img.is-fading{ opacity:0; transform:scale(1.06); }
-.cameo::after{                 /* aged glass bloom */
+.cameo::after{
   content:"";
   position:absolute; inset:0;
   background:
@@ -439,14 +560,12 @@ a{ color:var(--ink-royal); }
     radial-gradient(100% 100% at 50% 50%, transparent 55%, rgba(11,37,69,.30));
   pointer-events:none;
 }
-
 .cameo-heart{
   font-family:var(--script);
   font-size:clamp(2.2rem,7vw,3.2rem);
   color:var(--gold);
   line-height:1;
 }
-
 .cameo-names{
   display:grid;
   grid-template-columns:1fr auto 1fr;
@@ -457,7 +576,7 @@ a{ color:var(--ink-royal); }
   font-size:.76rem;
   letter-spacing:.3em;
   text-transform:uppercase;
-  color:rgba(11,37,69,.6);
+  color:rgba(11,37,69,.72);
 }
 .cameo-names span:nth-child(2){ opacity:0; }
 
@@ -475,59 +594,142 @@ a{ color:var(--ink-royal); }
   transition:background .3s, color .3s, transform .3s;
 }
 .cam-btn:hover{ background:var(--ink); color:var(--gold-pale); transform:scale(1.06); }
-.dots{ display:flex; gap:9px; }
-.dot{
-  width:7px; height:7px; padding:0;
-  border-radius:50%;
-  border:1px solid rgba(176,135,63,.7);
-  background:transparent;
-  transition:background .35s, transform .35s;
+
+.cam-track{
+  width:min(240px,52vw);
+  height:2px;
+  background:rgba(176,135,63,.28);
+  position:relative;
+  overflow:hidden;
 }
-.dot[aria-current="true"]{ background:var(--gold); transform:scale(1.35); }
+.cam-track i{
+  position:absolute; inset:0 auto 0 0;
+  display:block;
+  background:var(--gold);
+  transition:width .5s cubic-bezier(.2,.8,.3,1);
+}
+.cam-count{
+  margin-top:1.1em;
+  font-family:var(--display);
+  font-size:.72rem;
+  letter-spacing:.24em;
+  color:rgba(11,37,69,.72);
+  font-variant-numeric:tabular-nums;
+}
 
-/* --- details ---------------------------------------------- */
+/* --- the celebration: date block + calendar --------------- */
 
-.details{
+.datebox{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-  gap:0;
-  margin-top:clamp(8px,2vw,16px);
-  border-top:var(--rule);
-  border-bottom:var(--rule);
-}
-.detail{
-  padding:clamp(22px,4vw,30px) clamp(12px,2.6vw,22px);
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+  gap:clamp(18px,5.5vw,36px);
+  max-width:440px;
+  margin:0 auto;
   text-align:center;
 }
-.detail + .detail{ border-left:var(--rule); }
-@media (max-width:640px){
-  .detail + .detail{ border-left:0; border-top:var(--rule); }
-}
-.detail dt{
-  font-family:var(--serif);
-  font-size:.68rem;
-  letter-spacing:.36em;
-  text-indent:.36em;
-  text-transform:uppercase;
-  color:var(--gold);
-  margin-bottom:.85em;
-}
-.detail dd{
-  margin:0;
+.datebox .dow,.datebox .mon{
   font-family:var(--display);
-  font-size:clamp(1.02rem,3vw,1.2rem);
-  line-height:1.4;
+  font-size:clamp(1rem,3.4vw,1.3rem);
+  letter-spacing:.24em;
+  text-indent:.24em;
+  text-transform:uppercase;
+  color:var(--gold-ink);
+}
+.datebox .num{
+  font-family:var(--display);
+  font-size:clamp(3.7rem,16vw,6.4rem);
+  line-height:.88;
   color:var(--ink);
 }
-.detail dd small{
-  display:block;
-  font-family:var(--serif);
-  font-size:.86rem;
+.datebox .dow{ border-right:var(--rule); padding-right:clamp(14px,4vw,30px); }
+.datebox .mon{ border-left:var(--rule);  padding-left:clamp(14px,4vw,30px); }
+
+.date-words{
+  text-align:center;
   font-style:italic;
-  letter-spacing:0;
-  text-transform:none;
-  color:rgba(11,37,69,.6);
-  margin-top:.4em;
+  color:rgba(11,37,69,.7);
+  margin:1.5em 0 0;
+}
+
+.cal{
+  margin:clamp(26px,5vw,38px) auto 0;
+  max-width:340px;
+  border:var(--rule);
+  padding:clamp(14px,3vw,20px);
+}
+.cal caption{
+  font-family:var(--display);
+  font-size:.72rem;
+  letter-spacing:.3em;
+  text-indent:.3em;
+  text-transform:uppercase;
+  color:var(--gold-ink);
+  padding-bottom:1em;
+}
+.cal table{ width:100%; border-collapse:collapse; }
+.cal th{
+  font-family:var(--serif);
+  font-weight:400;
+  font-size:.66rem;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:rgba(11,37,69,.72);
+  padding-bottom:.6em;
+}
+.cal td{
+  text-align:center;
+  padding:.34em 0;
+  font-family:var(--display);
+  font-size:.9rem;
+  color:rgba(11,37,69,.72);
+  font-variant-numeric:tabular-nums;
+  position:relative;
+}
+.cal td.mark{ color:var(--parchment); font-weight:500; }
+.cal td.mark::before{
+  content:"";
+  position:absolute; left:50%; top:50%;
+  width:2.1em; height:2.1em;
+  transform:translate(-50%,-50%);
+  border-radius:50%;
+  background:linear-gradient(176deg,var(--ink-royal),var(--ink));
+}
+.cal td.mark span{ position:relative; }
+
+/* --- programme -------------------------------------------- */
+
+.programme{ margin:clamp(6px,2vw,14px) 0 0; padding:0; list-style:none; }
+.programme li{
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:clamp(14px,4vw,28px);
+  align-items:baseline;
+  padding:clamp(16px,3vw,20px) 0;
+  border-bottom:var(--rule);
+}
+.programme li:first-child{ border-top:var(--rule); }
+.programme time{
+  font-family:var(--display);
+  font-size:clamp(.92rem,3vw,1.05rem);
+  color:var(--gold-ink);
+  letter-spacing:.06em;
+  white-space:nowrap;
+  font-variant-numeric:tabular-nums;
+}
+.programme b{
+  display:block;
+  font-family:var(--display);
+  font-weight:500;
+  font-size:clamp(1rem,3.2vw,1.15rem);
+  letter-spacing:.03em;
+  color:var(--ink);
+}
+.programme small{
+  display:block;
+  font-style:italic;
+  color:rgba(11,37,69,.72);
+  margin-top:.2em;
 }
 
 /* --- countdown -------------------------------------------- */
@@ -540,16 +742,13 @@ a{ color:var(--ink-royal); }
 }
 .countdown-sheet::before{ border-color:rgba(221,184,110,.42); outline-color:rgba(221,184,110,.18); }
 .countdown-sheet .eyebrow{ color:var(--gold-lit); }
-.countdown-sheet .rule-orn{ color:var(--gold-lit); }
-.countdown-sheet .rule-orn::before{ background:linear-gradient(90deg,transparent,rgba(221,184,110,.7)); }
-.countdown-sheet .rule-orn::after { background:linear-gradient(270deg,transparent,rgba(221,184,110,.7)); }
 
 .mirrorball{
   width:56px; height:56px; margin:0 auto 1.2em;
   border-radius:50%;
   background:
     radial-gradient(38% 38% at 32% 26%, rgba(255,255,255,.95), transparent 60%),
-    conic-gradient(from 0deg, #8FA6BE, #E4EDF5, #6E8AA6, #DCE4EC, #7E97B2, #F1F6FA, #8FA6BE);
+    conic-gradient(from 0deg,#8FA6BE,#E4EDF5,#6E8AA6,#DCE4EC,#7E97B2,#F1F6FA,#8FA6BE);
   box-shadow:0 10px 20px -10px rgba(0,0,0,.6), inset 0 -8px 16px rgba(11,37,69,.6);
   position:relative;
   animation:spin 14s linear infinite;
@@ -582,7 +781,6 @@ a{ color:var(--ink-royal); }
   border:1px solid rgba(221,184,110,.34);
   border-radius:2px;
   background:rgba(255,255,255,.035);
-  backdrop-filter:blur(2px);
 }
 .unit b{
   display:block;
@@ -603,12 +801,7 @@ a{ color:var(--ink-royal); }
   text-transform:uppercase;
   color:var(--gold-lit);
 }
-.clock-note{
-  margin:1.6em 0 0;
-  font-style:italic;
-  color:rgba(245,238,222,.66);
-  font-size:.98rem;
-}
+.clock-note{ margin:1.7em auto 0; }
 
 /* --- venue ------------------------------------------------ */
 
@@ -622,27 +815,18 @@ a{ color:var(--ink-royal); }
   text-align:center;
   color:var(--ink);
 }
-.venue-sub{
-  text-align:center;
-  font-style:italic;
-  color:rgba(11,37,69,.68);
-  margin:0 auto 1.6em;
-  max-width:44ch;
-}
 .venue-addr{
   text-align:center;
   font-size:1rem;
   font-style:italic;
-  letter-spacing:.01em;
-  color:var(--gold);
-  margin:0 0 1.9em;
+  color:var(--gold-ink);
+  margin:1.4em 0 1.9em;
 }
 
 #map{
   height:clamp(260px,42vh,380px);
   border:1px solid rgba(176,135,63,.55);
   outline:4px solid var(--parchment);
-  outline-offset:0;
   box-shadow:0 0 0 5px rgba(176,135,63,.28), 0 22px 40px -24px rgba(0,0,0,.5);
   background:var(--parch-3);
   filter:sepia(.16) saturate(.9);
@@ -656,17 +840,9 @@ a{ color:var(--ink-royal); }
   background:linear-gradient(150deg,var(--ink-royal),var(--ink));
   box-shadow:0 0 0 2px var(--gold-lit), 0 6px 14px -4px rgba(0,0,0,.7);
 }
-.pin::after{
-  content:""; position:absolute;
-  inset:9px; border-radius:50%;
-  background:var(--gold-lit);
-}
+.pin::after{ content:""; position:absolute; inset:9px; border-radius:50%; background:var(--gold-lit); }
 
-.btn-row{
-  display:flex; flex-wrap:wrap; gap:12px;
-  justify-content:center;
-  margin-top:1.8em;
-}
+.btn-row{ display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-top:1.8em; }
 .btn{
   display:inline-flex; align-items:center; gap:.6em;
   padding:.8em 1.9em;
@@ -687,24 +863,15 @@ a{ color:var(--ink-royal); }
   transform:translateY(-2px);
   box-shadow:0 12px 22px -12px rgba(0,0,0,.5);
 }
-.btn-solid{
-  background:linear-gradient(176deg,var(--ink-royal),var(--ink));
-  color:var(--parchment);
-  border-color:var(--gold-lit);
-}
+.btn-solid{ background:linear-gradient(176deg,var(--ink-royal),var(--ink)); color:var(--parchment); border-color:var(--gold-lit); }
 .btn-solid:hover{ background:linear-gradient(176deg,#1B4C8E,#0D2C51); }
-.btn-wa{
-  background:linear-gradient(176deg,#1FA855,#12703A);
-  border-color:rgba(255,255,255,.4);
-  color:#fff;
-}
+.btn-wa{ background:linear-gradient(176deg,#1FA855,#12703A); border-color:rgba(255,255,255,.4); color:#fff; }
 .btn-wa:hover{ background:linear-gradient(176deg,#25BE60,#158043); color:#fff; }
 .btn svg{ width:1.05em; height:1.05em; flex:none; }
 
-/* --- notes / rsvp ----------------------------------------- */
+/* --- guestbook -------------------------------------------- */
 
 .note-form{ margin-top:clamp(20px,4vw,30px); }
-
 .field{ margin-bottom:1.25em; }
 .field label{
   display:block;
@@ -712,7 +879,7 @@ a{ color:var(--ink-royal); }
   letter-spacing:.3em;
   text-indent:.3em;
   text-transform:uppercase;
-  color:var(--gold);
+  color:var(--gold-ink);
   margin-bottom:.6em;
 }
 .field input,.field select,.field textarea{
@@ -741,20 +908,12 @@ a{ color:var(--ink-royal); }
   background:rgba(255,255,255,.78);
   box-shadow:0 0 0 3px rgba(221,184,110,.22);
 }
-.field input::placeholder,.field textarea::placeholder{ color:rgba(11,37,69,.34); font-style:italic; }
+.field input::placeholder,.field textarea::placeholder{ color:rgba(11,37,69,.68); font-style:italic; }
 
 .two-up{ display:grid; grid-template-columns:1fr 1fr; gap:1.25em; }
 @media (max-width:520px){ .two-up{ grid-template-columns:1fr; gap:0; } }
 
 .hp{ position:absolute; left:-9999px; opacity:0; height:0; overflow:hidden; }
-
-.form-note{
-  font-size:.86rem;
-  font-style:italic;
-  color:rgba(11,37,69,.55);
-  text-align:center;
-  margin:1.4em 0 0;
-}
 
 .wa-label{
   text-align:center;
@@ -763,12 +922,9 @@ a{ color:var(--ink-royal); }
   letter-spacing:.3em;
   text-indent:.3em;
   text-transform:uppercase;
-  color:var(--gold);
+  color:var(--gold-ink);
 }
-.wa-choice{
-  display:flex; gap:10px; justify-content:center;
-  margin:0 0 .4em; flex-wrap:wrap;
-}
+.wa-choice{ display:flex; gap:10px; justify-content:center; margin:0 0 .4em; flex-wrap:wrap; }
 .wa-choice button{
   padding:.55em 1.3em;
   font-size:.72rem;
@@ -788,7 +944,6 @@ a{ color:var(--ink-royal); }
   font-style:italic;
   min-height:1.6em;
   color:var(--ink-royal);
-  transition:color .3s;
 }
 .status.err{ color:#9B2C2C; }
 .status.ok{ color:#2F6B3D; font-style:normal; letter-spacing:.06em; }
@@ -815,17 +970,12 @@ a{ color:var(--ink-royal); }
   padding:clamp(38px,7vw,66px) var(--gutter) clamp(46px,8vw,72px);
   color:rgba(245,238,222,.6);
 }
-.foot .monogram{
-  font-family:var(--script);
-  font-size:2.6rem;
-  color:var(--gold-lit);
-  line-height:1;
-  margin-bottom:.35em;
-}
-.foot p{ margin:.35em 0; font-size:.9rem; }
+.foot .monogram{ font-family:var(--script); font-size:2.6rem; color:var(--gold-lit); line-height:1; margin-bottom:.35em; }
+.foot p{ margin:.35em 0; font-size:.95rem; }
+.foot .ar{ font-family:var(--arabic); font-size:1.2rem; color:rgba(221,184,110,.85); direction:rtl; }
 .foot .small{
   font-size:.68rem; letter-spacing:.3em; text-transform:uppercase;
-  color:rgba(245,238,222,.4); margin-top:1.6em;
+  color:rgba(245,238,222,.62); margin-top:1.6em;
 }
 .foot a{ color:rgba(221,184,110,.9); text-decoration:none; border-bottom:1px solid rgba(221,184,110,.35); }
 .foot a:hover{ color:var(--gold-lit); }
@@ -864,26 +1014,22 @@ a{ color:var(--ink-royal); }
     <div class="card paper">
       <svg class="corner tl" viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="1.1" aria-hidden="true">
         <path d="M2 26C2 12 12 2 26 2M2 34c0-6 3-10 8-12s9-6 10-12M14 46c0-9 5-14 12-16s12-8 13-16"/>
-        <circle cx="7" cy="7" r="1.7" fill="currentColor" stroke="none"/>
-        <path d="M20 40c5-1 8-4 9-9"/>
+        <circle cx="7" cy="7" r="1.7" fill="currentColor" stroke="none"/><path d="M20 40c5-1 8-4 9-9"/>
       </svg>
       <svg class="corner tr" viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="1.1" aria-hidden="true">
         <path d="M2 26C2 12 12 2 26 2M2 34c0-6 3-10 8-12s9-6 10-12M14 46c0-9 5-14 12-16s12-8 13-16"/>
-        <circle cx="7" cy="7" r="1.7" fill="currentColor" stroke="none"/>
-        <path d="M20 40c5-1 8-4 9-9"/>
+        <circle cx="7" cy="7" r="1.7" fill="currentColor" stroke="none"/><path d="M20 40c5-1 8-4 9-9"/>
       </svg>
       <svg class="corner bl" viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="1.1" aria-hidden="true">
         <path d="M2 26C2 12 12 2 26 2M2 34c0-6 3-10 8-12s9-6 10-12M14 46c0-9 5-14 12-16s12-8 13-16"/>
-        <circle cx="7" cy="7" r="1.7" fill="currentColor" stroke="none"/>
-        <path d="M20 40c5-1 8-4 9-9"/>
+        <circle cx="7" cy="7" r="1.7" fill="currentColor" stroke="none"/><path d="M20 40c5-1 8-4 9-9"/>
       </svg>
       <svg class="corner br" viewBox="0 0 60 60" fill="none" stroke="currentColor" stroke-width="1.1" aria-hidden="true">
         <path d="M2 26C2 12 12 2 26 2M2 34c0-6 3-10 8-12s9-6 10-12M14 46c0-9 5-14 12-16s12-8 13-16"/>
-        <circle cx="7" cy="7" r="1.7" fill="currentColor" stroke="none"/>
-        <path d="M20 40c5-1 8-4 9-9"/>
+        <circle cx="7" cy="7" r="1.7" fill="currentColor" stroke="none"/><path d="M20 40c5-1 8-4 9-9"/>
       </svg>
 
-      <div class="seal" aria-hidden="true"><span>A&nbsp;R</span></div>
+      <p class="gate-kicker">Together with their families</p>
 
       <h1 class="gate-names">
         Ahmed
@@ -891,17 +1037,33 @@ a{ color:var(--ink-royal); }
         Rola
       </h1>
 
-      <div class="rule-orn" aria-hidden="true">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0l2 6 6 2-6 2-2 6-2-6-6-2 6-2z"/></svg>
+      <p class="gate-ar">إنت عمري</p>
+
+      <p class="gate-date">
+        Thursday, the twenty-fourth of September<br>
+        Two thousand twenty-six
+      </p>
+
+      <div class="seal-wrap" aria-hidden="true">
+        <div class="seal-half l"><div class="seal-face"><span>A</span></div></div>
+        <div class="seal-half r"><div class="seal-face"><span>R</span></div></div>
       </div>
 
-      <p class="gate-sub">cordially invite you to their<br>engagement celebration</p>
-      <p class="gate-date">Alexandria &middot; 24 September</p>
-
-      <button class="open-btn" id="openBtn" type="button">Open</button>
-      <p class="gate-hint">Break the seal</p>
+      <button class="open-btn" id="openBtn" type="button">Open invitation</button>
     </div>
   </div>
+</div>
+
+<!-- ============================================================
+     THE MIRROR BALL
+     ============================================================ -->
+<div id="ballStage" aria-hidden="true">
+  <div class="rig">
+    <div class="cord"></div>
+    <div class="beams"></div>
+    <div class="ball"></div>
+  </div>
+  <button class="skip" id="skipBall" type="button">Skip</button>
 </div>
 
 <!-- ============================================================
@@ -923,14 +1085,30 @@ a{ color:var(--ink-royal); }
         Rola<span class="surname">Issa</span>
       </h2>
 
+      <p class="hero-ar rise d1">
+        إنت عمري
+        <small>You are my life</small>
+      </p>
+
       <div class="rule-orn rise d2" aria-hidden="true">
         <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0l2 6 6 2-6 2-2 6-2-6-6-2 6-2z"/></svg>
       </div>
 
-      <p class="hero-body rise d2">
-        request the pleasure of your company at the celebration of
-        their engagement, on the terrace above the Mediterranean where
-        the evening turns to <em>light and water</em>.
+      <p class="quote rise d2">
+        Born on the same day of the year, a year apart.
+        We got there eventually.
+      </p>
+    </div>
+  </section>
+
+  <!-- ---------- a note from us ---------- -->
+  <section class="sheet paper" aria-labelledby="note-h">
+    <div class="inner" style="text-align:center">
+      <p class="eyebrow rise" id="note-h">A note from us</p>
+      <h3 class="note-head rise">Please come</h3>
+      <p class="quote rise d1">
+        There will be dinner, music, and far too many photographs.
+        Come hungry, and plan on staying late. Mostly we just want the room full.
       </p>
     </div>
   </section>
@@ -941,9 +1119,9 @@ a{ color:var(--ink-royal); }
       <p class="eyebrow rise" id="cam-h">Long before</p>
 
       <div class="cameo-pair rise d1">
-        <figure class="cameo" id="camA"><img src="assets/ahmed-1.jpg" alt="Ahmed as a child" width="760" height="760" decoding="async"></figure>
+        <figure class="cameo"><img id="camA" src="assets/a-01.jpg" alt="Ahmed, growing up" width="760" height="760" decoding="async"></figure>
         <div class="cameo-heart" aria-hidden="true">&amp;</div>
-        <figure class="cameo" id="camR"><img src="assets/rola-1.jpg" alt="Rola as a child" width="760" height="760" decoding="async"></figure>
+        <figure class="cameo"><img id="camR" src="assets/r-01.jpg" alt="Rola, growing up" width="760" height="760" decoding="async"></figure>
       </div>
 
       <div class="cameo-names rise d1" aria-hidden="true">
@@ -954,36 +1132,70 @@ a{ color:var(--ink-royal); }
         <button class="cam-btn" id="camPrev" type="button" aria-label="Previous photographs">
           <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 2L4 8l6 6"/></svg>
         </button>
-        <div class="dots" id="camDots" role="tablist" aria-label="Choose a pair of photographs"></div>
+        <div class="cam-track" role="presentation"><i id="camBar" style="width:5.5%"></i></div>
         <button class="cam-btn" id="camNext" type="button" aria-label="Next photographs">
           <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2l6 6-6 6"/></svg>
         </button>
       </div>
 
-      <p class="hero-body rise d2" style="margin-top:1.8em">
-        Two children of this city, growing up a few streets and a few years
-        apart — and quite unaware of one another.
+      <p class="cam-count rise d2" id="camCount">1 / 18</p>
+
+      <div class="rule-orn rise d2" aria-hidden="true">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0l2 6 6 2-6 2-2 6-2-6-6-2 6-2z"/></svg>
+      </div>
+
+      <p class="quote rise d2">
+        Ahmed, the fifth of August 2004. Rola, the fifth of August 2005.
+        The same day in the same city, and neither of us had any idea.
       </p>
     </div>
   </section>
 
-  <!-- ---------- details ---------- -->
-  <section class="sheet paper" aria-label="Details of the celebration">
+  <!-- ---------- the celebration ---------- -->
+  <section class="sheet paper" aria-labelledby="cel-h">
+    <div class="inner" style="text-align:center">
+      <p class="eyebrow rise" id="cel-h">The celebration</p>
+
+      <div class="datebox rise">
+        <div class="dow">Thu</div>
+        <div class="num">24</div>
+        <div class="mon">Sep</div>
+      </div>
+
+      <p class="date-words rise d1">
+        Two thousand twenty-six, from six o'clock in the evening until ten
+      </p>
+
+      <div class="cal rise d1">
+        <table>
+          <caption>September 2026</caption>
+          <thead>
+            <tr><th>Su</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th></tr>
+          </thead>
+          <tbody>
+            <tr><td></td><td></td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+            <tr><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td></tr>
+            <tr><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td></tr>
+            <tr><td>20</td><td>21</td><td>22</td><td>23</td><td class="mark"><span>24</span></td><td>25</td><td>26</td></tr>
+            <tr><td>27</td><td>28</td><td>29</td><td>30</td><td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------- programme ---------- -->
+  <section class="sheet paper" aria-labelledby="prog-h">
     <div class="inner">
-      <dl class="details rise">
-        <div class="detail">
-          <dt>The Day</dt>
-          <dd>Thursday<small>24 September 2026</small></dd>
-        </div>
-        <div class="detail">
-          <dt>The Hour</dt>
-          <dd>6&nbsp;—&nbsp;10 in the evening<small>doors open at six</small></dd>
-        </div>
-        <div class="detail">
-          <dt>The Table</dt>
-          <dd>Open buffet<small>dinner served throughout</small></dd>
-        </div>
-      </dl>
+      <p class="eyebrow rise" style="text-align:center" id="prog-h">Order of the evening</p>
+      <h3 class="note-head rise">The programme</h3>
+
+      <ol class="programme rise d1">
+        <li><time>6:00</time><div><b>Reception</b><small>Guests welcomed with coffee and dates</small></div></li>
+        <li><time>7:00</time><div><b>The rings</b><small>The ceremony, on the terrace</small></div></li>
+        <li><time>8:00</time><div><b>Dinner</b><small>Open buffet, served throughout</small></div></li>
+        <li><time>9:00</time><div><b>Music and dancing</b><small>Until ten, and the lights come on</small></div></li>
+      </ol>
     </div>
   </section>
 
@@ -1000,8 +1212,9 @@ a{ color:var(--ink-royal); }
         <div class="unit"><b id="cd-s">—</b><span>Seconds</span></div>
       </div>
 
-      <p class="clock-note rise d2" id="clockNote">
-        counting down to six o'clock, Alexandria time
+      <p class="quote on-dark clock-note rise d2" id="clockNote">
+        We have waited longer than this.
+        The last few weeks are somehow the slowest.
       </p>
     </div>
   </section>
@@ -1009,12 +1222,14 @@ a{ color:var(--ink-royal); }
   <!-- ---------- venue ---------- -->
   <section class="sheet paper" aria-labelledby="v-h">
     <div class="inner">
-      <p class="eyebrow rise" style="text-align:center" id="v-h">The Place</p>
+      <p class="eyebrow rise" style="text-align:center" id="v-h">Where</p>
       <h3 class="venue-name rise">Windsor Palace</h3>
-      <p class="venue-sub rise d1">
-        A heritage hotel on the Corniche since 1906, whose terrace opens
-        one hundred and eighty degrees onto the sea.
+
+      <p class="quote rise d1">
+        The Windsor has stood on this Corniche since 1906.
+        We picked it for the terrace, where the sea takes up the whole view.
       </p>
+
       <p class="venue-addr rise d1">17 El Shohada Street &middot; El Raml Station &middot; Alexandria</p>
 
       <div id="map" class="rise d1" role="application" aria-label="Map showing Windsor Palace Hotel, Alexandria"></div>
@@ -1029,14 +1244,12 @@ a{ color:var(--ink-royal); }
     </div>
   </section>
 
-  <!-- ---------- note sender ---------- -->
+  <!-- ---------- guestbook ---------- -->
   <section class="sheet paper" aria-labelledby="n-h">
     <div class="inner">
-      <p class="eyebrow rise" style="text-align:center" id="n-h">Leave a note</p>
-      <h3 class="venue-name rise">Write to us</h3>
-      <p class="venue-sub rise d1">
-        Tell us you are coming, or simply say something we can keep.
-      </p>
+      <p class="eyebrow rise" style="text-align:center" id="n-h">Guestbook</p>
+      <h3 class="venue-name rise">Send us your wishes</h3>
+      <p class="quote rise d1">Write us something. We are going to keep these.</p>
 
       <form class="note-form rise d1" id="noteForm" novalidate>
         <div class="two-up">
@@ -1047,8 +1260,8 @@ a{ color:var(--ink-royal); }
           <div class="field">
             <label for="f-att">Will you join us?</label>
             <select id="f-att" name="attending">
-              <option value="Yes — joyfully">Yes — joyfully</option>
-              <option value="Yes — with my family">Yes — with my family</option>
+              <option value="Yes, joyfully">Yes, joyfully</option>
+              <option value="Yes, with my family">Yes, with my family</option>
               <option value="Not certain yet">Not certain yet</option>
               <option value="Sadly cannot">Sadly cannot</option>
             </select>
@@ -1056,7 +1269,7 @@ a{ color:var(--ink-royal); }
         </div>
 
         <div class="field">
-          <label for="f-msg">Your note</label>
+          <label for="f-msg">Your message</label>
           <textarea id="f-msg" name="message" placeholder="A wish, a blessing, a warning about the dancing…" required></textarea>
         </div>
 
@@ -1064,8 +1277,8 @@ a{ color:var(--ink-royal); }
 
         <p class="wa-label">Send the WhatsApp note to</p>
         <div class="wa-choice" id="waChoice" role="group" aria-label="Send the WhatsApp note to">
-          <button type="button" data-num="201004639700" aria-pressed="true">To Ahmed</button>
-          <button type="button" data-num="201145847058" aria-pressed="false">To Rola</button>
+          <button type="button" data-num="201004639700" aria-pressed="true">Ahmed</button>
+          <button type="button" data-num="201145847058" aria-pressed="false">Rola</button>
         </div>
 
         <div class="btn-row">
@@ -1087,7 +1300,8 @@ a{ color:var(--ink-royal); }
   <!-- ---------- footer ---------- -->
   <footer class="foot">
     <div class="monogram" aria-hidden="true">A &amp; R</div>
-    <p><em>We would be glad of your company.</em></p>
+    <p class="ar">إنت عمري</p>
+    <p><em>See you by the sea.</em></p>
     <p>
       <a href="tel:+201004639700">+20 100 463 9700</a>
       &nbsp;&middot;&nbsp;
@@ -1114,25 +1328,44 @@ var WEB3FORMS_KEYS = [
   "ac4ec317-153d-4c8c-aa92-4abdc6f0ccd0"    // rolaeissa58@gmail.com
 ];
 
-var PAIRS = [
-  ["assets/ahmed-1.jpg","assets/rola-1.jpg"],
-  ["assets/ahmed-2.jpg","assets/rola-2.jpg"],
-  ["assets/ahmed-3.jpg","assets/rola-3.jpg"],
-  ["assets/ahmed-4.jpg","assets/rola-4.jpg"],
-  ["assets/ahmed-5.jpg","assets/rola-5.jpg"],
-  ["assets/ahmed-6.jpg","assets/rola-6.jpg"]
-];
+/* Both sets run youngest to oldest. Ahmed has 18 photographs and Rola 14,
+   so each slide takes Ahmed's next one and the age-matched one of Rola's.
+   The mapping is monotone and hits every index, so nothing is left out. */
+var A_COUNT = 18, R_COUNT = 14;
+var SLIDES  = A_COUNT;
 
-var $  = function(s){ return document.querySelector(s); };
+function pad2(n){ return n < 10 ? "0" + n : "" + n; }
+function ahmedSrc(i){ return "assets/a-" + pad2(i + 1) + ".jpg"; }
+function rolaSrc(i){  return "assets/r-" + pad2(Math.round(i * (R_COUNT - 1) / (A_COUNT - 1)) + 1) + ".jpg"; }
+
+var $ = function(s){ return document.querySelector(s); };
 var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 /* ============================================================
-   THE GATE — breaking the seal
+   OPENING — break the seal, drop the mirror ball, let it climb
    ============================================================ */
 
-var gate    = $("#gate");
-var invite  = $("#invite");
-var opened  = false;
+var gate   = $("#gate");
+var stage  = $("#ballStage");
+var invite = $("#invite");
+var opened = false, ballTimer = null;
+
+function revealInvitation(){
+  invite.removeAttribute("aria-hidden");
+  invite.classList.add("is-revealed");
+  startPetals();
+  startCameos();
+  observeRises();
+  buildMap();
+}
+
+function endBall(){
+  if (!stage || !stage.parentNode) return;
+  clearTimeout(ballTimer);
+  stage.classList.remove("is-live");
+  stage.classList.add("is-done");
+  setTimeout(function(){ if (stage.parentNode) stage.remove(); }, 700);
+}
 
 function openInvitation(){
   if (opened) return;
@@ -1140,23 +1373,27 @@ function openInvitation(){
 
   gate.classList.add("is-open");
   document.body.classList.remove("is-sealed");
-  invite.removeAttribute("aria-hidden");
+  window.scrollTo(0, 0);
 
-  window.scrollTo(0,0);
+  setTimeout(function(){ if (gate.parentNode) gate.remove(); }, 1900);
 
-  setTimeout(function(){ invite.classList.add("is-revealed"); }, 260);
-  setTimeout(function(){ gate.remove(); }, 2200);
+  if (reduced){
+    endBall();
+    revealInvitation();
+    return;
+  }
 
-  startPetals();
-  startCameos();
-  observeRises();
-  buildMap();
+  // the ball comes down while the card is still lifting away
+  setTimeout(function(){ stage.classList.add("is-live"); }, 420);
+  setTimeout(revealInvitation, 1500);          // the page is ready behind it
+  ballTimer = setTimeout(endBall, 7000);       // rigDrop runs 6.6s
 }
 
 $("#openBtn").addEventListener("click", openInvitation);
+$("#skipBall").addEventListener("click", endBall);
 
 /* ============================================================
-   DISCO GLINTS — the mirror balls on the terrace
+   DISCO GLINTS on the gate
    ============================================================ */
 
 (function glints(){
@@ -1193,7 +1430,7 @@ $("#openBtn").addEventListener("click", openInvitation);
       ctx.globalAlpha = a;
       ctx.fillStyle = "rgba(" + d.hue + ",1)";
       ctx.beginPath(); ctx.arc(d.x, d.y, d.r, 0, 6.2832); ctx.fill();
-      if (d.r > 1.35){                       // a small cross-star on the brighter ones
+      if (d.r > 1.35){
         ctx.globalAlpha = a * .5;
         ctx.strokeStyle = "rgba(" + d.hue + ",1)";
         ctx.lineWidth = .6;
@@ -1208,9 +1445,7 @@ $("#openBtn").addEventListener("click", openInvitation);
   }
 
   seed();
-  if (reduced){ frame(0); cancelAnimationFrame(raf); }
-  else raf = requestAnimationFrame(frame);
-
+  if (reduced) frame(0); else raf = requestAnimationFrame(frame);
   window.addEventListener("resize", seed);
 })();
 
@@ -1229,11 +1464,11 @@ function startPetals(){
   var petals = [], W, H, dpr, t0 = performance.now();
 
   var TINTS = [
-    "rgba(245,238,222,",   // ivory
-    "rgba(169,196,222,",   // powder blue
-    "rgba(231,210,164,",   // pale gold
-    "rgba(20,60,116,",     // royal blue
-    "rgba(124,138,103,"    // sage leaf
+    "rgba(245,238,222,",
+    "rgba(169,196,222,",
+    "rgba(231,210,164,",
+    "rgba(20,60,116,",
+    "rgba(124,138,103,"
   ];
 
   function resize(){
@@ -1247,7 +1482,7 @@ function startPetals(){
     var big = Math.random();
     return {
       x: Math.random() * (W + 160) - 80,
-      y: startAbove ? -30 - Math.random()*H : Math.random() * H,
+      y: startAbove ? -30 : Math.random() * H,
       w: 7 + big*13,
       h: 10 + big*18,
       rot: Math.random()*6.2832,
@@ -1274,7 +1509,7 @@ function startPetals(){
     ctx.save();
     ctx.translate(p.x, p.y);
     ctx.rotate(p.rot);
-    ctx.scale(Math.cos(p.flip), 1);                // the flutter, edge-on and back
+    ctx.scale(Math.cos(p.flip), 1);
 
     var w = p.w, h = p.h;
     ctx.beginPath();
@@ -1289,7 +1524,7 @@ function startPetals(){
     ctx.fillStyle = g;
     ctx.fill();
 
-    ctx.strokeStyle = p.tint + (p.alpha*0.55) + ")";   // the centre vein
+    ctx.strokeStyle = p.tint + (p.alpha*0.55) + ")";
     ctx.lineWidth = .5;
     ctx.beginPath();
     ctx.moveTo(0,-h/2); ctx.lineTo(0, h*0.42);
@@ -1299,7 +1534,6 @@ function startPetals(){
 
   function frame(now){
     var t = (now - t0) / 1000;
-    // one slow breeze off the water, with a second, faster gust riding it
     var breeze = Math.sin(t * 0.16) * 0.85 + Math.sin(t * 0.53 + 1.7) * 0.38 + 0.34;
 
     ctx.clearRect(0,0,W,H);
@@ -1311,9 +1545,9 @@ function startPetals(){
       p.rot += p.spin + breeze * 0.0022;
       p.flip += p.flipSpeed;
 
-      if (p.y - p.h > H)      { petals[i] = make(true); petals[i].y = -30; }
-      else if (p.x > W + 90)  { p.x = -80; }
-      else if (p.x < -90)     { p.x = W + 80; }
+      if (p.y - p.h > H)      petals[i] = make(true);
+      else if (p.x > W + 90)  p.x = -80;
+      else if (p.x < -90)     p.x = W + 80;
       else draw(p);
     }
     requestAnimationFrame(frame);
@@ -1325,60 +1559,55 @@ function startPetals(){
 }
 
 /* ============================================================
-   CAMEOS — two childhoods, side by side
+   CAMEOS — every photograph, youngest to oldest
    ============================================================ */
 
 function startCameos(){
-  var imgA = $("#camA img"), imgR = $("#camR img");
-  var dots = $("#camDots");
+  var imgA  = $("#camA"), imgR = $("#camR");
+  var bar   = $("#camBar"), count = $("#camCount");
   var i = 0, timer;
 
-  PAIRS.forEach(function(_, n){
-    var b = document.createElement("button");
-    b.className = "dot";
-    b.type = "button";
-    b.setAttribute("role","tab");
-    b.setAttribute("aria-label", "Pair " + (n+1));
-    b.setAttribute("aria-current", n === 0 ? "true" : "false");
-    b.addEventListener("click", function(){ go(n, true); });
-    dots.appendChild(b);
-  });
-
-  function paint(n, instant){
-    if (instant){ mark(n); return; }
-    imgA.classList.add("is-fading");
-    imgR.classList.add("is-fading");
-    setTimeout(function(){
-      imgA.src = PAIRS[n][0];
-      imgR.src = PAIRS[n][1];
-      var on = function(){ imgA.classList.remove("is-fading"); imgR.classList.remove("is-fading"); };
-      if (imgA.complete && imgR.complete) on(); else imgA.onload = on;
-    }, reduced ? 0 : 260);
-
-    mark(n);
-  }
-
   function mark(n){
-    Array.prototype.forEach.call(dots.children, function(d, k){
-      d.setAttribute("aria-current", k === n ? "true" : "false");
-    });
+    bar.style.width = ((n + 1) / SLIDES * 100) + "%";
+    count.textContent = (n + 1) + " / " + SLIDES;
   }
 
   function go(n, manual){
-    i = (n + PAIRS.length) % PAIRS.length;
-    paint(i);
+    i = (n + SLIDES) % SLIDES;
+
+    imgA.classList.add("is-fading");
+    imgR.classList.add("is-fading");
+
+    setTimeout(function(){
+      imgA.src = ahmedSrc(i);
+      imgR.src = rolaSrc(i);
+      var on = function(){
+        imgA.classList.remove("is-fading");
+        imgR.classList.remove("is-fading");
+      };
+      if (imgA.complete && imgR.complete) on(); else imgA.onload = on;
+    }, reduced ? 0 : 250);
+
+    mark(i);
     if (manual) rest();
   }
-  function rest(){ clearInterval(timer); timer = setInterval(function(){ go(i+1); }, 5200); }
 
-  $("#camPrev").addEventListener("click", function(){ go(i-1, true); });
-  $("#camNext").addEventListener("click", function(){ go(i+1, true); });
+  function rest(){
+    clearInterval(timer);
+    if (!reduced) timer = setInterval(function(){ go(i + 1); }, 3600);
+  }
 
-  // preload so the crossfades never stutter
-  PAIRS.forEach(function(pair){ pair.forEach(function(src){ new Image().src = src; }); });
+  $("#camPrev").addEventListener("click", function(){ go(i - 1, true); });
+  $("#camNext").addEventListener("click", function(){ go(i + 1, true); });
 
-  paint(0, true);
-  if (!reduced) rest();
+  // warm the cache so the crossfades never stutter
+  for (var k = 0; k < SLIDES; k++){
+    new Image().src = ahmedSrc(k);
+    new Image().src = rolaSrc(k);
+  }
+
+  mark(0);
+  rest();
 }
 
 /* ============================================================
@@ -1395,17 +1624,15 @@ function startCameos(){
     var left = PARTY_START.getTime() - now;
 
     if (left <= 0){
-      if (now <= PARTY_END.getTime()){
-        d.textContent = h.textContent = m.textContent = s.textContent = "00";
-        note.innerHTML = "<strong>Tonight.</strong> We are on the terrace — come up.";
-      } else {
-        note.textContent = "With love, and thank you for being there.";
-      }
+      d.textContent = h.textContent = m.textContent = s.textContent = "00";
+      note.textContent = now <= PARTY_END.getTime()
+        ? "Tonight. We are on the terrace, come up."
+        : "Thank you for being there.";
       return;
     }
 
     var sec = Math.floor(left / 1000);
-    d.textContent  = pad(Math.floor(sec / 86400));
+    d.textContent = pad(Math.floor(sec / 86400));
     h.textContent = pad(Math.floor(sec / 3600) % 24);
     m.textContent = pad(Math.floor(sec / 60) % 60);
     s.textContent = pad(sec % 60);
@@ -1427,8 +1654,7 @@ function buildMap(){
   var map = L.map("map", {
     center:[VENUE.lat, VENUE.lng],
     zoom:16,
-    scrollWheelZoom:false,
-    attributionControl:true
+    scrollWheelZoom:false
   });
 
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -1438,13 +1664,7 @@ function buildMap(){
 
   L.marker([VENUE.lat, VENUE.lng], {
     title:"Windsor Palace Hotel",
-    icon: L.divIcon({
-      className:"",
-      html:'<div class="pin"></div>',
-      iconSize:[28,28],
-      iconAnchor:[14,28],
-      popupAnchor:[0,-26]
-    })
+    icon: L.divIcon({ className:"", html:'<div class="pin"></div>', iconSize:[28,28], iconAnchor:[14,28], popupAnchor:[0,-26] })
   }).addTo(map)
     .bindPopup("<strong>Windsor Palace</strong><br>17 El Shohada St, El Raml Station");
 
@@ -1469,7 +1689,7 @@ $("#copyAddr").addEventListener("click", function(){
 });
 
 /* ============================================================
-   THE NOTE — email + WhatsApp
+   THE GUESTBOOK — email + WhatsApp
    ============================================================ */
 
 var form   = $("#noteForm");
@@ -1530,8 +1750,7 @@ form.addEventListener("submit", function(e){
     }).then(function(r){ return r.json(); });
   }))
   .then(function(results){
-    var ok = results.some(function(r){ return r && r.success; });
-    if (!ok) throw new Error("rejected");
+    if (!results.some(function(r){ return r && r.success; })) throw new Error("rejected");
 
     form.querySelectorAll("input,select,textarea,button").forEach(function(el){ el.disabled = true; });
     say("Your note is on its way to both of us. Thank you.", "ok");

@@ -41,7 +41,8 @@
   --parch-2:    #EBE0C7;
   --parch-3:    #DCCFB0;
   --gold:       #B0873F;
-  --gold-ink:   #7E5E1E;   /* gold dark enough to read on cream */
+  --gold-ink:   #7E5E1E;   /* passes 4.5:1 on the paper, both ends  */
+  --gold-deep:  #9A742C;   /* passes 3:1 for the large script glyphs */
   --gold-lit:   #DDB86E;
   --gold-pale:  #E7D2A4;
   --sage:       #7C8A67;
@@ -85,8 +86,8 @@ a{ color:var(--ink-royal); }
 .paper{
   position:relative;
   background:
-    radial-gradient(120% 90% at 50% 0%,  #FBF6EA 0%, transparent 55%),
-    radial-gradient(90% 70% at 12% 100%, #EFE4CB 0%, transparent 60%),
+    linear-gradient(196deg, rgba(251,246,234,.92) 0%, rgba(251,246,234,0) 44%),
+    linear-gradient(8deg,   rgba(233,221,194,.70) 0%, rgba(233,221,194,0) 34%),
     linear-gradient(178deg, var(--parchment), var(--parch-2));
 }
 .paper::after{
@@ -141,8 +142,8 @@ a{ color:var(--ink-royal); }
   display:grid; place-items:center;
   padding:var(--gutter);
   background:
-    radial-gradient(120% 80% at 50% 8%,  rgba(46,111,142,.40) 0%, transparent 58%),
-    radial-gradient(90% 60% at 50% 108%, rgba(20,60,116,.85) 0%, transparent 62%),
+    linear-gradient(180deg, rgba(46,111,142,.30) 0%, rgba(46,111,142,0) 46%),
+    linear-gradient(0deg,   rgba(20,60,116,.55) 0%, rgba(20,60,116,0) 34%),
     linear-gradient(170deg,#0E2E56 0%, var(--ink) 42%, var(--ink-deep) 100%);
   transition:opacity .8s ease .5s, visibility .8s ease .5s;
 }
@@ -192,9 +193,9 @@ a{ color:var(--ink-royal); }
 .corner.br{ bottom:14px; right:14px; transform:scale(-1); }
 
 .gate-kicker{
-  font-size:.56rem;
-  letter-spacing:.24em;
-  text-indent:.24em;
+  font-size:.7rem;
+  letter-spacing:.16em;
+  text-indent:.16em;
   text-transform:uppercase;
   color:rgba(11,37,69,.72);
   margin:0 0 1.4em;
@@ -216,7 +217,7 @@ a{ color:var(--ink-royal); }
   font-size:clamp(3rem,12vw,3.9rem);
   text-transform:none;
   letter-spacing:0;
-  color:var(--gold);
+  color:var(--gold-deep);
   margin:.02em 0;
   line-height:.9;
 }
@@ -224,7 +225,7 @@ a{ color:var(--ink-royal); }
 .gate-ar{
   font-family:var(--arabic);
   font-size:clamp(1.3rem,5vw,1.6rem);
-  color:var(--gold);
+  color:var(--gold-ink);
   margin:.5em 0 0;
   direction:rtl;
 }
@@ -251,8 +252,8 @@ a{ color:var(--ink-royal); }
   width:86px; height:86px;
   border-radius:50%;
   background:
-    radial-gradient(60% 60% at 34% 28%, #1F5290 0%, transparent 60%),
-    radial-gradient(circle at 50% 50%, var(--ink-royal), var(--ink) 70%);
+    linear-gradient(146deg, rgba(31,82,144,.62) 0%, rgba(31,82,144,0) 48%),
+    radial-gradient(circle at 50% 50%, var(--ink-royal), var(--ink) 72%);
   box-shadow:
     inset 0 -6px 14px rgba(0,0,0,.42),
     inset 0 4px 10px rgba(255,255,255,.14);
@@ -279,7 +280,7 @@ a{ color:var(--ink-royal); }
 .open-btn{
   display:block;
   margin:clamp(20px,4vw,26px) auto 0;
-  padding:.55em 1.4em;
+  padding:12px 22px;
   border:0;
   background:transparent;
   color:rgba(11,37,69,.72);
@@ -288,9 +289,9 @@ a{ color:var(--ink-royal); }
   letter-spacing:.34em;
   text-indent:.34em;
   text-transform:uppercase;
-  transition:color .35s, letter-spacing .35s;
+  transition:color .35s;
 }
-.open-btn:hover{ color:var(--ink); letter-spacing:.42em; }
+.open-btn:hover{ color:var(--ink); }
 
 /* opening choreography */
 #gate.is-open .card{ animation:cardOut 1s cubic-bezier(.6,.02,.2,1) both; }
@@ -322,17 +323,17 @@ a{ color:var(--ink-royal); }
 .rig{
   position:absolute;
   left:50%; top:0;
-  transform:translateX(-50%);
-  height:0;
+  height:150vh;                       /* the cord starts well above frame */
+  transform:translate(-50%,-170vh);
 }
 #ballStage.is-live .rig{ animation:rigDrop 6.6s cubic-bezier(.34,.82,.36,1) both; }
 @keyframes rigDrop{
-  0%   { height:0; }
-  26%  { height:44vh; }
-  34%  { height:41vh; }          /* the cable settles */
-  40%  { height:43vh; }
-  68%  { height:43vh; }
-  100% { height:0; }
+  0%   { transform:translate(-50%,-170vh); }
+  26%  { transform:translate(-50%,-106vh); }
+  34%  { transform:translate(-50%,-109vh); }   /* the cable settles */
+  40%  { transform:translate(-50%,-107vh); }
+  68%  { transform:translate(-50%,-107vh); }
+  100% { transform:translate(-50%,-170vh); }
 }
 
 .cord{
@@ -351,7 +352,7 @@ a{ color:var(--ink-royal); }
   background:
     radial-gradient(38% 38% at 32% 26%, rgba(255,255,255,.95), transparent 60%),
     conic-gradient(from 0deg,#8FA6BE,#E4EDF5,#6E8AA6,#DCE4EC,#7E97B2,#F1F6FA,#93AAC2,#E8F0F7,#8FA6BE);
-  box-shadow:0 14px 26px -12px rgba(0,0,0,.75), inset 0 -10px 20px rgba(11,37,69,.55);
+  box-shadow:0 14px 26px -12px rgba(0,0,0,.75), inset 0 -10px 20px rgba(0,0,0,.42);
   animation:ballSpin 5s linear infinite;
 }
 .ball::before{
@@ -397,12 +398,12 @@ a{ color:var(--ink-royal); }
   border:1px solid rgba(221,184,110,.45);
   background:transparent;
   color:rgba(245,238,222,.75);
-  padding:.5em 1.6em;
+  padding:11px 26px;
   border-radius:999px;
   font-family:var(--display);
-  font-size:.68rem;
-  letter-spacing:.28em;
-  text-indent:.28em;
+  font-size:.74rem;
+  letter-spacing:.24em;
+  text-indent:.24em;
   text-transform:uppercase;
 }
 #ballStage .skip:hover{ color:var(--parchment); border-color:var(--gold-lit); }
@@ -417,8 +418,8 @@ a{ color:var(--ink-royal); }
 .sea-field{
   position:fixed; inset:0; z-index:-2;
   background:
-    radial-gradient(80% 55% at 50% 0%,  #16406F 0%, transparent 60%),
-    radial-gradient(60% 40% at 82% 74%, rgba(46,111,142,.55) 0%, transparent 62%),
+    linear-gradient(180deg, rgba(22,64,111,.85) 0%, rgba(22,64,111,0) 48%),
+    linear-gradient(115deg, rgba(46,111,142,0) 56%, rgba(46,111,142,.30) 100%),
     linear-gradient(172deg,#0F3160,var(--ink) 46%,var(--ink-deep));
 }
 #petals{ position:fixed; inset:0; z-index:40; pointer-events:none; width:100%; height:100%; }
@@ -448,8 +449,8 @@ a{ color:var(--ink-royal); }
 .hero{ text-align:center; padding-block:clamp(8px,2vw,20px); }
 
 .hero-kicker{
-  font-size:.68rem;
-  letter-spacing:.36em;
+  font-size:.7rem;
+  letter-spacing:.3em;
   text-indent:.36em;
   text-transform:uppercase;
   color:rgba(11,37,69,.72);
@@ -469,7 +470,7 @@ a{ color:var(--ink-royal); }
 .names .amp{
   display:block;
   font-family:var(--script);
-  color:var(--gold);
+  color:var(--gold-deep);
   font-size:clamp(3.6rem,16vw,6rem);
   letter-spacing:0;
   text-transform:none;
@@ -490,7 +491,7 @@ a{ color:var(--ink-royal); }
 .hero-ar{
   font-family:var(--arabic);
   font-size:clamp(1.5rem,6vw,2rem);
-  color:var(--gold);
+  color:var(--gold-ink);
   margin:.9em 0 0;
   direction:rtl;
 }
@@ -564,7 +565,7 @@ a{ color:var(--ink-royal); }
 .cameo-heart{
   font-family:var(--script);
   font-size:clamp(2.2rem,7vw,3.2rem);
-  color:var(--gold);
+  color:var(--gold-deep);
   line-height:1;
 }
 .cameo-names{
@@ -591,7 +592,7 @@ a{ color:var(--ink-royal); }
   border:1px solid rgba(176,135,63,.55);
   border-radius:50%;
   background:transparent;
-  color:var(--gold);
+  color:var(--gold-ink);
   transition:background .3s, color .3s, transform .3s;
 }
 .cam-btn:hover{ background:var(--ink); color:var(--gold-pale); transform:scale(1.06); }
@@ -604,10 +605,12 @@ a{ color:var(--ink-royal); }
   overflow:hidden;
 }
 .cam-track i{
-  position:absolute; inset:0 auto 0 0;
+  position:absolute; inset:0;
   display:block;
   background:var(--gold);
-  transition:width .5s cubic-bezier(.2,.8,.3,1);
+  transform-origin:left center;
+  transform:scaleX(.055);
+  transition:transform .5s cubic-bezier(.2,.8,.3,1);
 }
 .cam-count{
   margin-top:1.1em;
@@ -672,8 +675,8 @@ a{ color:var(--ink-royal); }
 .cal th{
   font-family:var(--serif);
   font-weight:400;
-  font-size:.66rem;
-  letter-spacing:.1em;
+  font-size:.7rem;
+  letter-spacing:.08em;
   text-transform:uppercase;
   color:rgba(11,37,69,.72);
   padding-bottom:.6em;
@@ -750,7 +753,7 @@ a{ color:var(--ink-royal); }
   background:
     radial-gradient(38% 38% at 32% 26%, rgba(255,255,255,.95), transparent 60%),
     conic-gradient(from 0deg,#8FA6BE,#E4EDF5,#6E8AA6,#DCE4EC,#7E97B2,#F1F6FA,#8FA6BE);
-  box-shadow:0 10px 20px -10px rgba(0,0,0,.6), inset 0 -8px 16px rgba(11,37,69,.6);
+  box-shadow:0 10px 20px -10px rgba(0,0,0,.6), inset 0 -8px 16px rgba(0,0,0,.45);
   position:relative;
   animation:spin 14s linear infinite;
 }
@@ -778,7 +781,7 @@ a{ color:var(--ink-royal); }
   margin:0 auto;
 }
 .unit{
-  padding:clamp(12px,2.6vw,20px) clamp(10px,2vw,14px);
+  padding:18px 14px;
   border:1px solid rgba(221,184,110,.34);
   border-radius:2px;
   background:rgba(255,255,255,.035);
@@ -796,8 +799,8 @@ a{ color:var(--ink-royal); }
 .unit span{
   display:block;
   margin-top:.75em;
-  font-size:.6rem;
-  letter-spacing:.28em;
+  font-size:.7rem;
+  letter-spacing:.22em;
   text-indent:.28em;
   text-transform:uppercase;
   color:var(--gold-lit);
@@ -833,7 +836,7 @@ a{ color:var(--ink-royal); }
   filter:sepia(.16) saturate(.9);
 }
 .leaflet-container{ font-family:var(--serif); background:#dfd6bd; }
-.leaflet-control-attribution{ font-size:9px; background:rgba(245,238,222,.82); }
+.leaflet-control-attribution{ font-size:10px; background:rgba(245,238,222,.82); }
 .pin{
   width:28px; height:28px;
   border-radius:50% 50% 50% 0;
@@ -876,8 +879,8 @@ a{ color:var(--ink-royal); }
 .field{ margin-bottom:1.25em; }
 .field label{
   display:block;
-  font-size:.68rem;
-  letter-spacing:.3em;
+  font-size:.7rem;
+  letter-spacing:.28em;
   text-indent:.3em;
   text-transform:uppercase;
   color:var(--gold-ink);
@@ -919,15 +922,15 @@ a{ color:var(--ink-royal); }
 .wa-label{
   text-align:center;
   margin:1.6em 0 .7em;
-  font-size:.66rem;
-  letter-spacing:.3em;
+  font-size:.7rem;
+  letter-spacing:.26em;
   text-indent:.3em;
   text-transform:uppercase;
   color:var(--gold-ink);
 }
 .wa-choice{ display:flex; gap:10px; justify-content:center; margin:0 0 .4em; flex-wrap:wrap; }
 .wa-choice button{
-  padding:.55em 1.3em;
+  padding:10px 20px;
   font-size:.72rem;
   letter-spacing:.18em;
   text-transform:uppercase;
@@ -1133,7 +1136,7 @@ a{ color:var(--ink-royal); }
         <button class="cam-btn" id="camPrev" type="button" aria-label="Previous photographs">
           <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 2L4 8l6 6"/></svg>
         </button>
-        <div class="cam-track" role="presentation"><i id="camBar" style="width:5.5%"></i></div>
+        <div class="cam-track" role="presentation"><i id="camBar"></i></div>
         <button class="cam-btn" id="camNext" type="button" aria-label="Next photographs">
           <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2l6 6-6 6"/></svg>
         </button>
@@ -1569,7 +1572,7 @@ function startCameos(){
   var i = 0, timer;
 
   function mark(n){
-    bar.style.width = ((n + 1) / SLIDES * 100) + "%";
+    bar.style.transform = "scaleX(" + ((n + 1) / SLIDES) + ")";
     count.textContent = (n + 1) + " / " + SLIDES;
   }
 
@@ -1593,13 +1596,34 @@ function startCameos(){
     if (manual) rest();
   }
 
+  var held = false, onScreen = true;
+
   function rest(){
     clearInterval(timer);
-    if (!reduced) timer = setInterval(function(){ go(i + 1); }, 3600);
+    if (!reduced && !held && onScreen){
+      timer = setInterval(function(){ go(i + 1); }, 4500);
+    }
   }
 
   $("#camPrev").addEventListener("click", function(){ go(i - 1, true); });
   $("#camNext").addEventListener("click", function(){ go(i + 1, true); });
+
+  /* Hold still while someone is actually looking at a photograph, and
+     stop entirely once the section scrolls away. */
+  var section = $(".cameos");
+  ["pointerenter","focusin","touchstart"].forEach(function(ev){
+    section.addEventListener(ev, function(){ held = true;  clearInterval(timer); }, {passive:true});
+  });
+  ["pointerleave","focusout"].forEach(function(ev){
+    section.addEventListener(ev, function(){ held = false; rest(); });
+  });
+
+  if ("IntersectionObserver" in window){
+    new IntersectionObserver(function(entries){
+      onScreen = entries[0].isIntersecting;
+      if (onScreen) rest(); else clearInterval(timer);
+    }, { threshold:0.25 }).observe(section);
+  }
 
   // warm the cache so the crossfades never stutter
   for (var k = 0; k < SLIDES; k++){

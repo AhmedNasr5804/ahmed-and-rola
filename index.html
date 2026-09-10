@@ -579,15 +579,15 @@ a{ color:var(--ink-royal); }
   display:grid;
   grid-template-columns:1fr auto 1fr;
   align-items:center;
-  gap:clamp(10px,3.2vw,30px);
+  gap:clamp(8px,2.4vw,26px);
   margin:clamp(22px,4vw,34px) auto 0;
-  max-width:620px;
+  max-width:700px;
 }
 .cameo{
   position:relative;
   margin:0;
-  aspect-ratio:1;
-  border-radius:50% / 54%;
+  aspect-ratio:4 / 5;          /* an upright cameo, not a circle */
+  border-radius:50%;
   overflow:hidden;
   background:var(--parch-3);
   box-shadow:
@@ -666,10 +666,10 @@ a{ color:var(--ink-royal); }
 /* on a phone the two ovals are the point of the section, so claw back
    the side padding and shrink the ampersand to give them the width */
 @media (max-width:560px){
-  .sheet.cameo-sheet{ padding-left:14px; padding-right:14px; }
-  .cameo-pair{ gap:9px; margin-inline:-6px; }
-  .cameo-heart{ font-size:1.55rem; }
-  .cameo-names{ gap:9px; margin-inline:-6px; font-size:.72rem; letter-spacing:.22em; }
+  .sheet.cameo-sheet{ padding-left:10px; padding-right:10px; }
+  .cameo-pair{ gap:6px; margin-inline:-4px; }
+  .cameo-heart{ font-size:1.35rem; }
+  .cameo-names{ gap:6px; margin-inline:-4px; font-size:.72rem; letter-spacing:.16em; }
 }
 
 /* --- the celebration: date block + calendar --------------- */
@@ -1185,9 +1185,9 @@ a{ color:var(--ink-royal); }
       <p class="eyebrow rise" id="cam-h">Long before</p>
 
       <div class="cameo-pair rise d1">
-        <figure class="cameo"><img id="camA" src="assets/a-01.jpg" alt="Ahmed, growing up" width="760" height="760" decoding="async"></figure>
+        <figure class="cameo"><img id="camA" src="assets/a-01.jpg" alt="Ahmed, growing up" width="760" height="950" decoding="async"></figure>
         <div class="cameo-heart" aria-hidden="true">&amp;</div>
-        <figure class="cameo"><img id="camR" src="assets/r-01.jpg" alt="Rola, growing up" width="760" height="760" decoding="async"></figure>
+        <figure class="cameo"><img id="camR" src="assets/r-01.jpg" alt="Rola, growing up" width="760" height="950" decoding="async"></figure>
       </div>
 
       <div class="cameo-names rise d1" aria-hidden="true">
@@ -1204,7 +1204,7 @@ a{ color:var(--ink-royal); }
         </button>
       </div>
 
-      <p class="cam-count rise d2" id="camCount">1 / 22</p>
+      <p class="cam-count rise d2" id="camCount">1 / 6</p>
 
       <div class="rule-orn rise d2" aria-hidden="true">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0l2 6 6 2-6 2-2 6-2-6-6-2 6-2z"/></svg>
@@ -1398,15 +1398,14 @@ var WEB3FORMS_KEYS = [
   "ac4ec317-153d-4c8c-aa92-4abdc6f0ccd0"    // rolaeissa58@gmail.com
 ];
 
-/* Both sets run youngest to oldest. Rola has 22 photographs and Ahmed 18,
-   so the slider runs 22 long: hers advance one per slide, his are spread
-   across the same span by age. Every photograph in both folders appears. */
-var A_COUNT = 18, R_COUNT = 22;
-var SLIDES  = Math.max(A_COUNT, R_COUNT);
+/* Five childhood photographs each, chosen for the clearest faces and
+   ordered youngest first, with the present-day portrait closing the run.
+   Both sides are the same length, so neither ever holds or repeats. */
+var SLIDES = 6;
 
 function pad2(n){ return n < 10 ? "0" + n : "" + n; }
-function ahmedSrc(i){ return "assets/a-" + pad2(Math.round(i * (A_COUNT - 1) / (SLIDES - 1)) + 1) + ".jpg"; }
-function rolaSrc(i){  return "assets/r-" + pad2(Math.round(i * (R_COUNT - 1) / (SLIDES - 1)) + 1) + ".jpg"; }
+function ahmedSrc(i){ return "assets/a-" + pad2(i + 1) + ".jpg"; }
+function rolaSrc(i){  return "assets/r-" + pad2(i + 1) + ".jpg"; }
 
 var $ = function(s){ return document.querySelector(s); };
 var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;

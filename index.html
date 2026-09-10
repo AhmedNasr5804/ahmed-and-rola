@@ -22,7 +22,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Pinyon+Script&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Aref+Ruqaa:wght@400;700&family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Pinyon+Script&display=swap" rel="stylesheet">
 
 <style>
 /* ============================================================
@@ -51,6 +51,7 @@
   --display:"Cinzel", "Trajan Pro", Georgia, serif;
   --script: "Pinyon Script", "Snell Roundhand", cursive;
   --arabic: "Amiri", "Traditional Arabic", serif;
+  --ar-display: "Aref Ruqaa", "Amiri", serif;
 
   --rule: 1px solid rgba(176,135,63,.42);
   --gutter: clamp(18px, 5vw, 44px);
@@ -517,7 +518,7 @@ a{ color:var(--ink-royal); }
 /* Umm Kulthum, on a disc that stays within thumb reach */
 .song-btn{
   position:fixed;
-  right:max(16px, env(safe-area-inset-right));
+  inset-inline-end:max(16px, env(safe-area-inset-right));
   bottom:max(16px, env(safe-area-inset-bottom));
   z-index:50;
   width:54px; height:54px;
@@ -555,7 +556,7 @@ a{ color:var(--ink-royal); }
   50%    { transform:scaleY(1); }
 }
 
-.play-tri{ width:17px; height:17px; margin-left:2px; }
+.play-tri{ width:17px; height:17px; margin-inline-start:2px; }
 .song-btn[aria-pressed="true"] .play-tri{ display:none; }
 
 /* --- section heads ---------------------------------------- */
@@ -697,8 +698,8 @@ a{ color:var(--ink-royal); }
   line-height:.88;
   color:var(--ink);
 }
-.datebox .dow{ border-right:var(--rule); padding-right:clamp(14px,4vw,30px); }
-.datebox .mon{ border-left:var(--rule);  padding-left:clamp(14px,4vw,30px); }
+.datebox .dow{ border-inline-end:var(--rule);   padding-inline-end:clamp(14px,4vw,30px); }
+.datebox .mon{ border-inline-start:var(--rule); padding-inline-start:clamp(14px,4vw,30px); }
 
 .date-words{
   text-align:center;
@@ -1038,6 +1039,118 @@ a{ color:var(--ink-royal); }
 .foot a{ color:rgba(221,184,110,.9); text-decoration:none; border-bottom:1px solid rgba(221,184,110,.35); }
 .foot a:hover{ color:var(--gold-lit); }
 
+/* ============================================================
+   LANGUAGE
+   ============================================================ */
+
+.lang{
+  position:fixed;
+  inset-inline-end:max(16px, env(safe-area-inset-right));
+  top:max(16px, env(safe-area-inset-top));
+  z-index:65;
+  display:flex;
+  overflow:hidden;
+  border:1px solid var(--gold-lit);
+  border-radius:999px;
+  background:linear-gradient(176deg,var(--ink-royal),var(--ink));
+  box-shadow:0 8px 18px -10px rgba(0,0,0,.65);
+}
+.lang button{
+  min-width:46px;
+  padding:9px 12px;
+  border:0;
+  background:transparent;
+  color:rgba(245,238,222,.66);
+  font-family:var(--display);
+  font-size:.74rem;
+  letter-spacing:.12em;
+  line-height:1.2;
+  transition:background .3s, color .3s;
+}
+.lang button[lang="ar"]{ font-family:var(--arabic); font-size:1rem; letter-spacing:normal; }
+.lang button[aria-pressed="true"]{ background:rgba(221,184,110,.9); color:var(--ink); }
+.lang button:hover{ color:var(--parchment); }
+.lang button[aria-pressed="true"]:hover{ color:var(--ink); }
+
+/* ---- Arabic setting -------------------------------------- */
+
+[dir="rtl"] body{
+  font-family:var(--arabic);
+  font-size:clamp(17px,1.08rem,19px);
+  line-height:1.95;
+}
+[dir="rtl"] .names,
+[dir="rtl"] .gate-names,
+[dir="rtl"] .note-head,
+[dir="rtl"] .venue-name{ font-family:var(--ar-display); font-weight:400; }
+
+[dir="rtl"] .quote,
+[dir="rtl"] .gate-date,
+[dir="rtl"] .date-words,
+[dir="rtl"] .venue-addr,
+[dir="rtl"] .programme small,
+[dir="rtl"] .foot p em,
+[dir="rtl"] .field input::placeholder,
+[dir="rtl"] .field textarea::placeholder{ font-style:normal; }
+
+/* Arabic is a joined script: tracking and small-caps break it apart */
+[dir="rtl"] .eyebrow,
+[dir="rtl"] .gate-kicker,
+[dir="rtl"] .hero-kicker,
+[dir="rtl"] .open-hint,
+[dir="rtl"] .surname,
+[dir="rtl"] .venue-addr,
+[dir="rtl"] .datebox .dow,
+[dir="rtl"] .datebox .mon,
+[dir="rtl"] .unit span,
+[dir="rtl"] .cal caption,
+[dir="rtl"] .cal th,
+[dir="rtl"] .field label,
+[dir="rtl"] .wa-label,
+[dir="rtl"] .wa-choice button,
+[dir="rtl"] .btn,
+[dir="rtl"] .cameo-names,
+[dir="rtl"] .foot .small,
+[dir="rtl"] .skip,
+[dir="rtl"] .programme b,
+[dir="rtl"] .note-head,
+[dir="rtl"] .venue-name,
+[dir="rtl"] .names,
+[dir="rtl"] .gate-names{
+  letter-spacing:normal;
+  text-indent:0;
+  text-transform:none;
+}
+[dir="rtl"] .names{ font-size:clamp(2.4rem,10vw,4.4rem); line-height:1.3; }
+[dir="rtl"] .gate-names{ font-size:clamp(2.1rem,8.4vw,2.8rem); line-height:1.4; }
+[dir="rtl"] .surname{ font-size:clamp(.9rem,3vw,1.1rem); margin-top:.15em; }
+[dir="rtl"] .eyebrow,
+[dir="rtl"] .field label,
+[dir="rtl"] .wa-label{ font-size:.92rem; }
+[dir="rtl"] .gate-kicker,
+[dir="rtl"] .hero-kicker{ font-size:.92rem; }
+[dir="rtl"] .open-hint{ font-size:1rem; }
+[dir="rtl"] .cameo-names{ font-size:.95rem; }
+[dir="rtl"] .cam-count,
+[dir="rtl"] .foot .small{ font-size:.82rem; }
+[dir="rtl"] .btn,
+[dir="rtl"] .wa-choice button,
+[dir="rtl"] .skip{ font-size:.9rem; }
+[dir="rtl"] .programme b{ font-size:clamp(1.05rem,3.4vw,1.25rem); }
+[dir="rtl"] .datebox .dow,
+[dir="rtl"] .datebox .mon{ font-size:clamp(1.05rem,3.6vw,1.35rem); }
+[dir="rtl"] .unit span{ font-size:.82rem; }
+[dir="rtl"] .hero-ar small{ display:none; }
+[dir="rtl"] .cal th{ font-size:.8rem; }
+
+/* the select arrow and the slider fill belong on the other side now */
+[dir="rtl"] .field select{
+  background-position:left 1em center;
+  padding-right:1em;
+  padding-left:2.6em;
+}
+[dir="rtl"] .cam-track i{ inset:0 0 0 auto; }
+
 /* --- scroll reveal ---------------------------------------- */
 
 .rise{ opacity:0; transform:translateY(26px); }
@@ -1132,6 +1245,11 @@ a{ color:var(--ink-royal); }
 <canvas id="petals" aria-hidden="true"></canvas>
 
 <audio id="song" src="assets/enta-omri.mp3" loop preload="none"></audio>
+<div class="lang" id="lang" role="group" aria-label="Language / اللغة">
+  <button type="button" data-lang="en" aria-pressed="true">EN</button>
+  <button type="button" data-lang="ar" aria-pressed="false" lang="ar">ع</button>
+</div>
+
 <button class="song-btn" id="songBtn" type="button" aria-pressed="false" aria-label="Play the song">
   <span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
   <svg class="play-tri" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.1v9.8L12.6 8z" fill="currentColor"/></svg>
@@ -1159,7 +1277,7 @@ a{ color:var(--ink-royal); }
         <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0l2 6 6 2-6 2-2 6-2-6-6-2 6-2z"/></svg>
       </div>
 
-      <p class="quote rise d2">
+      <p class="quote rise d2" id="hero-quote">
         Born on the same day of the year, a year apart.
         We got there eventually.
       </p>
@@ -1170,8 +1288,8 @@ a{ color:var(--ink-royal); }
   <section class="sheet paper" aria-labelledby="note-h">
     <div class="inner" style="text-align:center">
       <p class="eyebrow rise" id="note-h">A note from us</p>
-      <h3 class="note-head rise">Please come</h3>
-      <p class="quote rise d1">
+      <h3 class="note-head rise" id="note-head">Please come</h3>
+      <p class="quote rise d1" id="note-quote">
         Three years I loved her before any of this was certain, and I would
         have waited longer without complaining once. Now there is a date, and
         a table above the sea, and the only thing still missing is you at it.
@@ -1210,7 +1328,7 @@ a{ color:var(--ink-royal); }
         <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0l2 6 6 2-6 2-2 6-2-6-6-2 6-2z"/></svg>
       </div>
 
-      <p class="quote rise d2">
+      <p class="quote rise d2" id="cam-quote">
         Ahmed, the fifth of August 2004. Rola, the fifth of August 2005.
         The same day in the same city, and neither of us had any idea.
       </p>
@@ -1254,7 +1372,7 @@ a{ color:var(--ink-royal); }
   <section class="sheet paper" aria-labelledby="prog-h">
     <div class="inner">
       <p class="eyebrow rise" style="text-align:center" id="prog-h">Order of the evening</p>
-      <h3 class="note-head rise">The programme</h3>
+      <h3 class="note-head rise" id="prog-head">The programme</h3>
 
       <ol class="programme rise d1">
         <li><time>6:00</time><div><b>Reception</b><small>Guests welcomed with coffee and dates</small></div></li>
@@ -1289,9 +1407,9 @@ a{ color:var(--ink-royal); }
   <section class="sheet paper" aria-labelledby="v-h">
     <div class="inner">
       <p class="eyebrow rise" style="text-align:center" id="v-h">Where</p>
-      <h3 class="venue-name rise">Windsor Palace</h3>
+      <h3 class="venue-name rise" id="venue-name">Windsor Palace</h3>
 
-      <p class="quote rise d1">
+      <p class="quote rise d1" id="venue-quote">
         The Windsor has stood on this Corniche since 1906.
         We picked it for the terrace, where the sea takes up the whole view.
       </p>
@@ -1300,7 +1418,7 @@ a{ color:var(--ink-royal); }
 
       <div class="map-frame rise d1">
         <iframe
-          title="Google map showing Windsor Palace Hotel, Alexandria"
+          id="map-frame" title="Google map showing Windsor Palace Hotel, Alexandria"
           src="https://maps.google.com/maps?q=31.2004702,29.8968842&amp;z=16&amp;hl=en&amp;output=embed"
           loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
       </div>
@@ -1308,7 +1426,7 @@ a{ color:var(--ink-royal); }
       <div class="btn-row rise d2">
         <a class="btn btn-solid" href="https://www.google.com/maps/dir/?api=1&destination=31.2004702,29.8968842&destination_place_id=Windsor+Palace+Hotel+Alexandria" target="_blank" rel="noopener">
           <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M8 15s5.2-5 5.2-8.7A5.2 5.2 0 108 15z"/><circle cx="8" cy="6.3" r="1.9"/></svg>
-          Directions
+          <span id="dirLabel">Directions</span>
         </a>
         <button class="btn" type="button" id="copyAddr">Copy address</button>
       </div>
@@ -1319,8 +1437,8 @@ a{ color:var(--ink-royal); }
   <section class="sheet paper" aria-labelledby="n-h">
     <div class="inner">
       <p class="eyebrow rise" style="text-align:center" id="n-h">Guestbook</p>
-      <h3 class="venue-name rise">Send us your wishes</h3>
-      <p class="quote rise d1">Write us something. We are going to keep these.</p>
+      <h3 class="venue-name rise" id="guest-head">Send us your wishes</h3>
+      <p class="quote rise d1" id="guest-quote">Write us something. We are going to keep these.</p>
 
       <form class="note-form rise d1" id="noteForm" novalidate>
         <div class="two-up">
@@ -1355,11 +1473,11 @@ a{ color:var(--ink-royal); }
         <div class="btn-row">
           <button class="btn btn-solid" type="submit" id="sendMail">
             <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="1.2" y="3.2" width="13.6" height="9.6" rx="1.2"/><path d="M1.6 4l6.4 4.6L14.4 4"/></svg>
-            Seal &amp; send
+            <span id="mailLabel">Seal &amp; send</span>
           </button>
           <button class="btn btn-wa" type="button" id="sendWa">
             <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 .8a7.1 7.1 0 00-6.1 10.7L.8 15.2l3.9-1a7.1 7.1 0 103.3-13.4zm0 1.4a5.7 5.7 0 11-3 10.5l-.3-.2-2.3.6.6-2.2-.2-.3A5.7 5.7 0 018 2.2zm-2.6 2.6c-.2 0-.4.1-.6.3-.2.3-.7.8-.7 1.8s.7 2 .8 2.2c.1.2 1.4 2.3 3.5 3.1 1.7.7 2.1.6 2.5.5.4 0 1.2-.5 1.4-1s.2-.9.1-1l-.6-.3-1-.5c-.2-.1-.3-.1-.5.1l-.6.8c-.1.1-.2.2-.4 0-.2 0-.9-.3-1.7-1-.6-.6-1-1.2-1.2-1.4 0-.2 0-.3.1-.4l.4-.4.2-.4v-.4l-.7-1.6c-.2-.4-.3-.4-.5-.4z"/></svg>
-            Send on WhatsApp
+            <span id="waLabel">Send on WhatsApp</span>
           </button>
         </div>
 
@@ -1372,7 +1490,7 @@ a{ color:var(--ink-royal); }
   <footer class="foot">
     <div class="monogram" aria-hidden="true">A &amp; R</div>
     <p class="ar">إنت عمري</p>
-    <p><em>See you by the sea.</em></p>
+    <p><em id="footLine">See you by the sea.</em></p>
     <p>
       <a href="tel:+201004639700">+20 100 463 9700</a>
       &nbsp;&middot;&nbsp;
@@ -1410,6 +1528,171 @@ function rolaSrc(i){  return "assets/r-" + pad2(i + 1) + ".jpg"; }
 var $ = function(s){ return document.querySelector(s); };
 var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+
+/* ============================================================
+   LANGUAGE — an Arabic reading of the invitation, not a gloss
+   ============================================================ */
+
+/* "sel": text · "sel@attr": attribute · "sel!": innerHTML */
+var AR = {
+  ".gate-kicker": "بمباركة الأهل",
+  ".gate-names!": "أحمد<span class=\"gate-amp\">&amp;</span>رولا",
+  ".gate-date!": "الخميس، الرابع والعشرون من سبتمبر<br>ألفان وستة وعشرون",
+  ".open-hint": "افتح",
+  "#openBtn@aria-label": "اكسر الختم وافتح الدعوة",
+  "#skipBall": "تخطّي",
+
+  ".hero-kicker": "بمباركة الأهل",
+  ".names!": "أحمد<span class=\"surname\">نصر</span><span class=\"amp\">&amp;</span>رولا<span class=\"surname\">عيسى</span>",
+  "#hero-quote": "وُلدنا في اليوم نفسه من العام، يفصل بيننا عامٌ واحد، ثمّ تأخّر بنا الطريق قليلاً حتّى التقينا.",
+
+  "#note-h": "كلمة منّا",
+  "#note-head": "كونوا معنا",
+  "#note-quote": "أحببتُها ثلاث سنين قبل أن يصير شيءٌ من هذا مؤكّداً، ولو طال الانتظار أكثر ما ضقتُ به. واليوم صار للحلم موعد، ومائدة تطلّ على البحر، ولا ينقصها سواكم.",
+
+  "#cam-h": "قبل أن نلتقي",
+  "#camPrev@aria-label": "الصور السابقة",
+  "#camNext@aria-label": "الصور التالية",
+  "#camA@alt": "أحمد في طفولته",
+  "#camR@alt": "رولا في طفولتها",
+  ".cameo-names span:nth-child(1)": "أحمد",
+  ".cameo-names span:nth-child(3)": "رولا",
+  "#cam-quote": "أحمد، في الخامس من أغسطس 2004. ورولا، في الخامس من أغسطس 2005. اليوم نفسه، والمدينة نفسها، ولم يكن أحدنا يدري بالآخر.",
+
+  "#cel-h": "الاحتفال",
+  ".datebox .dow": "الخميس",
+  ".datebox .mon": "سبتمبر",
+  ".date-words": "عام ألفين وستة وعشرين، من السادسة مساءً حتّى العاشرة",
+  ".cal caption": "سبتمبر 2026",
+  ".cal th:nth-child(1)": "ح",
+  ".cal th:nth-child(2)": "ن",
+  ".cal th:nth-child(3)": "ث",
+  ".cal th:nth-child(4)": "ر",
+  ".cal th:nth-child(5)": "خ",
+  ".cal th:nth-child(6)": "ج",
+  ".cal th:nth-child(7)": "س",
+
+  "#prog-h": "برنامج الأمسية",
+  "#prog-head": "البرنامج",
+  ".programme li:nth-child(1) b": "الاستقبال",
+  ".programme li:nth-child(1) small": "قهوة وتمر في انتظاركم",
+  ".programme li:nth-child(2) b": "الخواتم",
+  ".programme li:nth-child(2) small": "المراسم على الشرفة",
+  ".programme li:nth-child(3) b": "العشاء",
+  ".programme li:nth-child(3) small": "بوفيه مفتوح طوال السهرة",
+  ".programme li:nth-child(4) b": "الموسيقى والرقص",
+  ".programme li:nth-child(4) small": "حتّى العاشرة، ثمّ تُضاء الأنوار",
+
+  "#cd-h": "حتّى تلك الأمسية",
+  ".unit:nth-child(1) span": "أيام",
+  ".unit:nth-child(2) span": "ساعات",
+  ".unit:nth-child(3) span": "دقائق",
+  ".unit:nth-child(4) span": "ثوانٍ",
+  "#clockNote": "انتظرنا أطول من هذا بكثير، ومع ذلك فالأسابيع الأخيرة هي الأبطأ.",
+
+  "#v-h": "المكان",
+  "#venue-name": "فندق وندسور بالاس",
+  "#venue-quote": "يقف وندسور على هذا الكورنيش منذ عام 1906. اخترناه من أجل شرفته، حيث لا يترك البحر في المشهد مكاناً لشيء آخر.",
+  ".venue-addr": "17 شارع الشهداء · محطة الرمل · الإسكندرية",
+  "#dirLabel": "الطريق إلى هناك",
+  "#copyAddr": "انسخ العنوان",
+  "#map-frame@title": "خريطة جوجل لفندق وندسور بالاس، الإسكندرية",
+
+  "#n-h": "دفتر التهاني",
+  "#guest-head": "اكتبوا لنا",
+  "#guest-quote": "اتركوا لنا كلمة. سنحتفظ بها.",
+  "label[for=f-name]": "اسمك",
+  "#f-name@placeholder": "حتّى نعرف صاحب الكلمة",
+  "label[for=f-att]": "هل ستكونون معنا؟",
+  "#f-att option:nth-child(1)": "نعم، بكل الفرح",
+  "#f-att option:nth-child(2)": "نعم، ومعي أهلي",
+  "#f-att option:nth-child(3)": "لست متأكّداً بعد",
+  "#f-att option:nth-child(4)": "للأسف لن أستطيع",
+  "label[for=f-msg]": "كلمتك",
+  "#f-msg@placeholder": "دعوة، أو بركة، أو تحذير من الرقص…",
+  ".wa-label": "أرسلوها على واتساب إلى",
+  "#waChoice button:nth-child(1)": "أحمد",
+  "#waChoice button:nth-child(2)": "رولا",
+  "#mailLabel": "اختم وأرسل",
+  "#waLabel": "أرسل على واتساب",
+
+  "#footLine": "نراكم على البحر.",
+  ".foot .small": "الإسكندرية · 2026"
+};
+
+/* strings the scripts write while the page is running */
+var RUN = {
+  en: {
+    needBoth:"A name and a note, please.",
+    sealing:"Sealing…",
+    sent:"Your note is on its way to both of us. Thank you.",
+    failed:"That did not go through. Try WhatsApp instead?",
+    waOpening:"WhatsApp is opening…",
+    copied:"Copied", copyAddr:"Copy address",
+    playSong:"Play the song", pauseSong:"Pause the song",
+    tonight:"Tonight. We are on the terrace, come up.",
+    afterwards:"Thank you for being there.",
+    waHead:"Ahmed & Rola — engagement note", waFrom:"From", waAtt:"Attending"
+  },
+  ar: {
+    needBoth:"اسمك وكلمتك، من فضلك.",
+    sealing:"جارٍ الختم…",
+    sent:"وصلت كلمتكم إلينا نحن الاثنين. شكراً لكم.",
+    failed:"لم تصل الرسالة. جرّبوا واتساب؟",
+    waOpening:"يفتح واتساب الآن…",
+    copied:"تمّ النسخ", copyAddr:"انسخ العنوان",
+    playSong:"شغّل الأغنية", pauseSong:"أوقف الأغنية",
+    tonight:"الليلة. نحن على الشرفة، اصعدوا إلينا.",
+    afterwards:"شكراً لأنّكم كنتم معنا.",
+    waHead:"دعوة خطوبة أحمد ورولا",
+    waFrom:"من", waAtt:"الحضور"
+  }
+};
+
+var lang = "en";
+var EN = {};                        /* captured from the page on first run */
+
+function t(key){ return (RUN[lang] || RUN.en)[key]; }
+
+function applyLang(next){
+  lang = next;
+  var dict = next === "ar" ? AR : EN;
+
+  Object.keys(AR).forEach(function(spec){
+    var parts = spec.split("@"), sel = parts[0], attr = parts[1];
+    var html = sel.slice(-1) === "!";
+    if (html) sel = sel.slice(0, -1);
+
+    var el = document.querySelector(sel);
+    if (!el) return;
+
+    if (!(spec in EN)){
+      EN[spec] = attr ? el.getAttribute(attr) : (html ? el.innerHTML : el.textContent);
+    }
+    var val = dict[spec];
+    if (val == null) return;
+    if (attr)      el.setAttribute(attr, val);
+    else if (html) el.innerHTML = val;
+    else           el.textContent = val;
+  });
+
+  document.documentElement.lang = next;
+  document.documentElement.dir  = next === "ar" ? "rtl" : "ltr";
+
+  Array.prototype.forEach.call(document.querySelectorAll("#lang button"), function(b){
+    b.setAttribute("aria-pressed", b.dataset.lang === next ? "true" : "false");
+  });
+
+  if (audio) paintSong(!audio.paused);
+  tickClock();
+
+  try{ localStorage.setItem("ar-lang", next); }catch(e){}
+}
+
+Array.prototype.forEach.call(document.querySelectorAll("#lang button"), function(b){
+  b.addEventListener("click", function(){ applyLang(b.dataset.lang); });
+});
+
 /* ============================================================
    THE SONG
    ============================================================ */
@@ -1419,7 +1702,7 @@ var songBtn = $("#songBtn");
 
 function paintSong(playing){
   songBtn.setAttribute("aria-pressed", playing ? "true" : "false");
-  songBtn.setAttribute("aria-label", playing ? "Pause the song" : "Play the song");
+  songBtn.setAttribute("aria-label", playing ? t("pauseSong") : t("playSong"));
 }
 
 /* Called straight out of the seal's click handler, so the browser counts
@@ -1742,39 +2025,35 @@ function startCameos(){
    COUNTDOWN
    ============================================================ */
 
-(function countdown(){
-  var d = $("#cd-d"), h = $("#cd-h2"), m = $("#cd-m"), s = $("#cd-s");
+function tickClock(){
+  var d = $("#cd-d"), h = $("#cd-h2"), m = $("#cd-m"), sEl = $("#cd-s");
   var note = $("#clockNote");
   var pad = function(n){ return n < 10 ? "0" + n : "" + n; };
 
-  function tick(){
-    var now  = Date.now();
-    var left = PARTY_START.getTime() - now;
+  var now  = Date.now();
+  var left = PARTY_START.getTime() - now;
 
-    if (left <= 0){
-      d.textContent = h.textContent = m.textContent = s.textContent = "00";
-      note.textContent = now <= PARTY_END.getTime()
-        ? "Tonight. We are on the terrace, come up."
-        : "Thank you for being there.";
-      return;
-    }
-
-    var sec = Math.floor(left / 1000);
-    d.textContent = pad(Math.floor(sec / 86400));
-    h.textContent = pad(Math.floor(sec / 3600) % 24);
-    m.textContent = pad(Math.floor(sec / 60) % 60);
-    s.textContent = pad(sec % 60);
+  if (left <= 0){
+    d.textContent = h.textContent = m.textContent = sEl.textContent = "00";
+    note.textContent = now <= PARTY_END.getTime() ? t("tonight") : t("afterwards");
+    return;
   }
 
-  tick();
-  setInterval(tick, 1000);
-})();
+  var sec = Math.floor(left / 1000);
+  d.textContent   = pad(Math.floor(sec / 86400));
+  h.textContent   = pad(Math.floor(sec / 3600) % 24);
+  m.textContent   = pad(Math.floor(sec / 60) % 60);
+  sEl.textContent = pad(sec % 60);
+}
+
+tickClock();
+setInterval(tickClock, 1000);
 
 $("#copyAddr").addEventListener("click", function(){
-  var btn = this, old = btn.textContent;
+  var btn = this;
   var done = function(){
-    btn.textContent = "Copied";
-    setTimeout(function(){ btn.textContent = old; }, 1800);
+    btn.textContent = t("copied");
+    setTimeout(function(){ btn.textContent = t("copyAddr"); }, 1800);
   };
   if (navigator.clipboard && navigator.clipboard.writeText){
     navigator.clipboard.writeText(ADDRESS).then(done, done);
@@ -1806,7 +2085,7 @@ Array.prototype.forEach.call($("#waChoice").children, function(b){
 function readForm(){
   return {
     name:      $("#f-name").value.trim(),
-    attending: $("#f-att").value,
+    attending: $("#f-att").selectedOptions[0].textContent,   /* as the guest read it */
     message:   $("#f-msg").value.trim(),
     bot:       form.botcheck.checked
   };
@@ -1823,14 +2102,14 @@ form.addEventListener("submit", function(e){
   var v = readForm();
   if (v.bot) return;
   if (!v.name || !v.message){
-    say("A name and a note, please.", "err");
+    say(t("needBoth"), "err");
     (!v.name ? $("#f-name") : $("#f-msg")).focus();
     return;
   }
 
   var btn = $("#sendMail");
   btn.disabled = true;
-  say("Sealing…");
+  say(t("sealing"));
 
   var body = {
     subject: "Engagement note from " + v.name,
@@ -1851,7 +2130,7 @@ form.addEventListener("submit", function(e){
     if (!results.some(function(r){ return r && r.success; })) throw new Error("rejected");
 
     form.querySelectorAll("input,select,textarea,button").forEach(function(el){ el.disabled = true; });
-    say("Your note is on its way to both of us. Thank you.", "ok");
+    say(t("sent"), "ok");
 
     var seal = document.createElement("div");
     seal.className = "sent-seal";
@@ -1861,25 +2140,25 @@ form.addEventListener("submit", function(e){
   })
   .catch(function(){
     btn.disabled = false;
-    say("That did not go through. Try WhatsApp instead?", "err");
+    say(t("failed"), "err");
   });
 });
 
 $("#sendWa").addEventListener("click", function(){
   var v = readForm();
   if (!v.name || !v.message){
-    say("A name and a note, please.", "err");
+    say(t("needBoth"), "err");
     (!v.name ? $("#f-name") : $("#f-msg")).focus();
     return;
   }
   var text =
-    "Ahmed & Rola — engagement note\n\n" +
-    "From: " + v.name + "\n" +
-    "Attending: " + v.attending + "\n\n" +
+    t("waHead") + "\n\n" +
+    t("waFrom") + ": " + v.name + "\n" +
+    t("waAtt") + ": " + v.attending + "\n\n" +
     v.message;
 
   window.open("https://wa.me/" + waNum + "?text=" + encodeURIComponent(text), "_blank", "noopener");
-  say("WhatsApp is opening…");
+  say(t("waOpening"));
 });
 
 /* ============================================================
@@ -1899,6 +2178,17 @@ function observeRises(){
   }, { rootMargin:"0px 0px -12% 0px", threshold:0.08 });
   items.forEach(function(el){ io.observe(el); });
 }
+
+/* ============================================================
+   OPENING LANGUAGE
+   ============================================================ */
+
+(function initLang(){
+  var saved = null;
+  try{ saved = localStorage.getItem("ar-lang"); }catch(e){}
+  var guess = (navigator.language || "").toLowerCase().indexOf("ar") === 0 ? "ar" : "en";
+  applyLang(saved === "ar" || saved === "en" ? saved : guess);
+})();
 
 })();
 </script>
